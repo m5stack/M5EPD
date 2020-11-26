@@ -1,3 +1,5 @@
+//The Fonts file (M5EPD_TTF) used in the example is in the same path as the program, please install Fonts file in TF card or SPIFFS before compiling.
+
 #include "M5EPD.h"
 #include "FS.h"
 #include "SPIFFS.h"
