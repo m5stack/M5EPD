@@ -1,22 +1,20 @@
 # M5Paper Library
 
-English | [中文](README_cn.md)
+[English](README.md) | 中文
 
 ![M5Paper_Pic_01](https://m5stack.oss-cn-shenzhen.aliyuncs.com/image/product_jpg/assets/img/product_pics/core/m5paper/m5paper_01.jpg)
 
-## Description
+## 描述
 
-**M5Paper** is M5Stacks latest core device with a touch enabled E-ink display. Powered by the ESP32-D0WDQ6-V3 this is our first device to integrate a super sized 540*960 @4.7" E-ink display，which supports 16 grayscale levels. The display is a GT911 capacitive touch screen，which supports two point touch and a variety of gesture controls . Compared to a regular LCD，E-ink displays are easier on the eyes, which makes them a great choice for reading or viewing for longer periods. Other benefits are the low power consumption and the ability to retain the image even if power to the display is terminated. Integrated in the CoreInk are an multi-function button for operation, SHT30 temperature and moisture sensor, physical buttons and an TF card port for data storage.
+**M5Paper** 是M5Stack推出的一款可触控墨水屏主控设备，控制器采用ESP32-D0WD。正面嵌入了一块分辨率为540*960 @4.7"的电子墨水屏，支持16级灰度显示。搭配GT911电容式触控面板，支持两点触控与多种手势操作。相对于普通的LCD的屏幕，电子墨水屏能够提供用户更好的文本阅读体验， 同时具有低功耗，掉电图像保持等特性。 集成拨轮开关, SHT30温湿度传感器, 与物理按键。数据储存方面预留了TF卡接口，并集成了FM24C02储存芯片(256KB-EEPROM)用于用户数据的断电存储。内置了1150mAh锂电池，结合内部的RTC(BM8563)可实现休眠与唤醒功能，能够为设备提供强大的续航能力。开放了3组HY2.0-4P外设接口能够拓展各式各样的传感器设备，为后续的应用功能开发提供无限可能。
 
-Additionally the FM24C02 internal eeprom chip(256KB-EEPROM)can be used to store vital data even when the device is off. A 1150mAh lipo battery keeps the device going for long periods and battery life can be further preserved by using the RTC(BM8563)to set the device into deep sleep and wake it up again when needed。Three HY2.0-4P expansion ports are included which allow for building complex projects using the existing sensors in the M5Stack ecosystem.
+?>注意事项: 请勿长时间暴露在紫外线下, 否则有可能对墨水屏造成不可逆的损害。
 
-?>Warning: Do not expose to ultraviolet rays for a long time, otherwise it may cause irreversible damage to the ink screen.
+## 管脚映射
 
-## PinMap
+**墨水屏幕 & TF Card**
 
-**E-INK & TF Card**
-
-Resolution：540*960
+屏幕像素：540*960
  
 <table>
  <tr><td>ESP32 Chip</td><td>GPIO13</td><td>GPIO12</td><td>GPIO14</td><td>GPIO15</td><td>GPIO4</td></tr>
@@ -25,15 +23,15 @@ Resolution：540*960
 </table>
 
 
-**Multi-function button**
+**拨轮开关**
 
 <table>
  <tr><td>ESP32 Chip</td><td>GPIO37</td><td>GPIO38</td><td>GPIO39</td></tr>
- <tr><td>Multi-function button</td><td>Right</td><td>BTN/PWR</td><td>Left</td></tr>
+ <tr><td>拨轮开关</td><td>右</td><td>中按钮/电源按钮</td><td>左</td></tr>
 </table>
 
 
-**Internal I2C Connection**
+**内部I2C连接**
 
 <table>
  <tr><td>ESP32 Chip</td><td>GPIO21</td><td>GPIO22</td><td>GPIO36</td></tr>
@@ -43,20 +41,20 @@ Resolution：540*960
  <tr><td>FM24C02</td><td>SDA</td><td>SCL</td><td>/</td></tr>
 </table>
 
-**USB Serial**
+**USB转串口下载**
 
 <table>
  <tr><td>ESP32 Chip</td><td>GPIO1</td><td>GPIO3</td></tr>
  <tr><td>CP2104</td><td>RXD</td><td>TXD</td></tr>
 </table>
 
-## M5Paper-HY2.0 4P Port
+## M5Paper-HY2.0 4P端口
 
 <table>
       <thead>
          <th>PORT</th>
          <th>PIN</th>
-         <th>Protocol:</th>
+         <th>备注:</th>
       </thead>
       <tbody>
       <tr>
@@ -77,7 +75,7 @@ Resolution：540*960
     </tbody>
 </table>
 
-## ESP32 ADC/DAC Mappable Pins
+## ESP32 ADC/DAC可映射引脚
 
 <table>
       <thead>
@@ -88,10 +86,10 @@ Resolution：540*960
       </thead>
       <tbody>
       <tr>
-         <td>8 Channel</td>
-         <td>10 Channel</td>
-         <td>2 Channel</td>
-         <td>2 Channel</td>  
+         <td>8 通道</td>
+         <td>10 通道</td>
+         <td>2 通道</td>
+         <td>2 通道</td>  
       </tr>
       <tr>
          <td>G32-39</td>
@@ -102,9 +100,10 @@ Resolution：540*960
     </tbody>
 </table>
 
-For more info on specific pin functions refer to the official ESP32 Docs[ESP32 datasheet](https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/docs/datasheet/core/esp32_datasheet_en.pdf)
+有关引脚分配和引脚重新映射的更多信息，请参考[ESP32 datasheet](https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/docs/datasheet/core/esp32_datasheet_cn.pdf)
 
-## Related Link
+
+## 相关链接
 
 - **Datasheet** 
    - [ESP32](https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/docs/datasheet/core/esp32_datasheet_en.pdf)
@@ -113,10 +112,11 @@ For more info on specific pin functions refer to the official ESP32 Docs[ESP32 d
    - [SY7088](https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/docs/datasheet/core/SY7088-Silergy.pdf)
    - [GT911-datasheet](https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/docs/datasheet/core/m5paper/gt911_datasheet.pdf)
 
--  **API**
+- **API** 
 
    - [Arduino API](en/arduino/arduino_home_page?id=m5paper)
 
-## Schematic
+## 原理图
 
-   - [M5 PAPER Schematic](https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/docs/schematic/Core/m5paper/M5_PAPER_SCH.pdf)
+   - [M5 PAPER 原理图下载](https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/docs/schematic/Core/m5paper/M5_PAPER_SCH.pdf)
+

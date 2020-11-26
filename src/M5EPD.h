@@ -51,6 +51,11 @@ public:
     uint32_t getBatteryRaw();
     uint32_t getBatteryVoltage();
 
+    void shutdown();
+    int shutdown( int seconds );
+    int shutdown( const rtc_time_t &RTC_TimeStruct);
+    int shutdown( const rtc_date_t &RTC_DateStruct, const rtc_time_t &RTC_TimeStruct);
+
     Button BtnL = Button(M5EPD_KEY_LEFT_PIN, true, 10);
     Button BtnP = Button(M5EPD_KEY_PUSH_PIN, true, 10);
     Button BtnR = Button(M5EPD_KEY_RIGHT_PIN, true, 10);
