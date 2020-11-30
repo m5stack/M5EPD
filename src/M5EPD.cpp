@@ -16,7 +16,7 @@ M5EPD::M5EPD()
 
 /** @brief Initialize the power supply, screen and other peripherals
   */
-void M5EPD::begin(bool touchEnable, bool SDEnable, bool SerialEnable, bool I2CEnable, bool BatteryADCEnable)
+void M5EPD::begin(bool touchEnable, bool SDEnable, bool SerialEnable, bool BatteryADCEnable, bool I2CEnable)
 {
     if (_isInited)
     {
