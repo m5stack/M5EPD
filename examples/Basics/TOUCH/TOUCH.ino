@@ -23,18 +23,18 @@ void loop()
         if(!M5.TP.isFingerUp()){
             M5.TP.update();
             canvas.fillCanvas(0);
-            bool is_upadte = false;
+            bool is_update = false;
             for(int i=0;i<2; i++){
                 tp_finger_t FingerItem = M5.TP.readFinger(i);
                 if((point[i][0]!=FingerItem.x)||(point[i][1]!=FingerItem.y)){
-                    is_upadte = true;
+                    is_update = true;
                     point[i][0] = FingerItem.x;
                     point[i][1] = FingerItem.y;
                     canvas.fillRect(FingerItem.x-50, FingerItem.y-50, 100, 100, 15);
                     Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y , FingerItem.size);
                 }
             }
-            if(is_upadte)
+            if(is_update)
             {
                 canvas.pushCanvas(0,0,UPDATE_MODE_DU4);
             }
