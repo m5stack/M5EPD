@@ -37,9 +37,9 @@ void M5EPD::begin(bool touchEnable, bool SDEnable, bool SerialEnable, bool Batte
 
     pinMode(M5EPD_EXT_PWR_EN_PIN, OUTPUT);
     pinMode(M5EPD_EPD_PWR_EN_PIN, OUTPUT);
-    pinMode(M5EPD_KEY_RIGHT_PIN, INPUT);
+    pinMode(M5EPD_KEY_UP_PIN, INPUT);                //pinMode(M5EPD_KEY_RIGHT_PIN, INPUT);
     pinMode(M5EPD_KEY_PUSH_PIN, INPUT);
-    pinMode(M5EPD_KEY_LEFT_PIN, INPUT);
+    pinMode(M5EPD_KEY_DOWN_PIN, INPUT);              //pinMode(M5EPD_KEY_LEFT_PIN, INPUT);
     delay(100);
 
     enableEXTPower();
@@ -121,9 +121,9 @@ uint32_t M5EPD::getBatteryVoltage()
 void M5EPD::update()
 {
     //Button update
-    BtnL.read();
+    BtnU.read();
     BtnP.read();
-    BtnR.read();
+    BtnD.read();
 }
 
 void M5EPD::shutdown()

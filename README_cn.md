@@ -27,7 +27,7 @@
 
 <table>
  <tr><td>ESP32 Chip</td><td>GPIO37</td><td>GPIO38</td><td>GPIO39</td></tr>
- <tr><td>拨轮开关</td><td>右</td><td>中按钮/电源按钮</td><td>左</td></tr>
+ <tr><td>拨轮开关</td><td>上</td><td>中按钮/电源按钮</td><td>下</td></tr>
 </table>
 
 

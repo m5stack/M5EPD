@@ -29,7 +29,7 @@ Resolution：540*960
 
 <table>
  <tr><td>ESP32 Chip</td><td>GPIO37</td><td>GPIO38</td><td>GPIO39</td></tr>
- <tr><td>Multi-function button</td><td>Right</td><td>BTN/PWR</td><td>Left</td></tr>
+ <tr><td>Multi-function button</td><td>Up</td><td>BTN/PWR</td><td>Down</td></tr>
 </table>
 
 

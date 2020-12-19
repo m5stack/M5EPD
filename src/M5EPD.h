@@ -24,9 +24,9 @@
 #define M5EPD_MISO_PIN 13
 #define M5EPD_EXT_PWR_EN_PIN 5
 #define M5EPD_EPD_PWR_EN_PIN 23
-#define M5EPD_KEY_RIGHT_PIN 39
+#define M5EPD_KEY_UP_PIN 37              //#define M5EPD_KEY_RIGHT_PIN 39
 #define M5EPD_KEY_PUSH_PIN 38
-#define M5EPD_KEY_LEFT_PIN 37
+#define M5EPD_KEY_DOWN_PIN 39            //#define M5EPD_KEY_LEFT_PIN 37
 #define M5EPD_BAT_VOL_PIN 35
 #define M5EPD_PORTC_W_PIN 19
 #define M5EPD_PORTC_Y_PIN 18
@@ -56,9 +56,9 @@ public:
     int shutdown( const rtc_time_t &RTC_TimeStruct);
     int shutdown( const rtc_date_t &RTC_DateStruct, const rtc_time_t &RTC_TimeStruct);
 
-    Button BtnL = Button(M5EPD_KEY_LEFT_PIN, true, 10);
+    Button BtnU = Button(M5EPD_KEY_UP_PIN, true, 10);           //Button BtnL = Button(M5EPD_KEY_LEFT_PIN, true, 10);
     Button BtnP = Button(M5EPD_KEY_PUSH_PIN, true, 10);
-    Button BtnR = Button(M5EPD_KEY_RIGHT_PIN, true, 10);
+    Button BtnD = Button(M5EPD_KEY_DOWN_PIN, true, 10);         //Button BtnR = Button(M5EPD_KEY_RIGHT_PIN, true, 10);
 
     M5EPD_Driver EPD = M5EPD_Driver();
     GT911 TP = GT911();
