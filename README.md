@@ -115,7 +115,7 @@ For more info on specific pin functions refer to the official ESP32 Docs[ESP32 d
 
 -  **API**
 
-   - [Arduino API](en/arduino/arduino_home_page?id=m5paper)
+   - [Arduino API](https://docs.m5stack.com/#/en/arduino/arduino_home_page?id=m5paper_api)
 
 ## Schematic
 

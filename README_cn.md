@@ -114,7 +114,7 @@
 
 - **API** 
 
-   - [Arduino API](en/arduino/arduino_home_page?id=m5paper)
+   - [Arduino API](https://docs.m5stack.com/#/zh_CN/arduino/arduino_home_page?id=m5paper_api)
 
 ## 原理图
 
