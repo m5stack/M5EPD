@@ -28,7 +28,16 @@
 #include <stdint.h>
 #include <math.h>
 
+// Load ESP_IDF_VERSION_MAJOR if exists
+#include <esp_system.h>
+
+// ESP_IDF_VERSION_MAJOR is defined in ESP-IDF v3.3 or later
+#if defined(ESP_IDF_VERSION_MAJOR) && ESP_IDF_VERSION_MAJOR > 3
+#include <esp32/rom/miniz.h>
+#else
 #include <rom/miniz.h>
+#endif
+
 #include "pngle.h"
 
 #ifndef MIN
