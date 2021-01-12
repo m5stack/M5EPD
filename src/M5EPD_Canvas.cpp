@@ -792,7 +792,9 @@ bool M5EPD_Canvas::drawBmpFile(fs::FS &fs, const char *path, uint16_t x, uint16_
     uint16_t w, h, row, col;
     uint8_t r, g, b;
 
+#if ARDUHAL_LOG_LEVEL >= ARDUHAL_LOG_LEVEL_DEBUG
     uint32_t startTime = millis();
+#endif
 
     if (read16(bmpFS) == 0x4D42)
     {
