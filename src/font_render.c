@@ -29,7 +29,9 @@ static esp_err_t font_cache_init(font_render_t *render)
 {
     font_cache_destroy(render);
 
+#if ARDUHAL_LOG_LEVEL >= ARDUHAL_LOG_LEVEL_DEBUG
     uint32_t heapsize = esp_get_free_heap_size();
+#endif
     render->max_pixel_width = (render->pixel_size * (render->font_face->ft_face->bbox.xMax - render->font_face->ft_face->bbox.xMin)) / render->font_face->ft_face->units_per_EM + 1;
     render->max_pixel_height = (render->pixel_size * (render->font_face->ft_face->bbox.yMax - render->font_face->ft_face->bbox.yMin)) / render->font_face->ft_face->units_per_EM + 1;
     // render->origin = (render->pixel_size * (-render->font_face->ft_face->bbox.yMin)) / render->font_face->ft_face->units_per_EM;
