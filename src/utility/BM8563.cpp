@@ -103,7 +103,7 @@ void BM8563::getTime(rtc_time_t *time)
     time->hour = Bcd2ToByte(buf[2] & 0x3f);
 }
 
-void BM8563::setTime(rtc_time_t *time)
+void BM8563::setTime(const rtc_time_t *time)
 {
 
     if (time == NULL)
@@ -150,7 +150,7 @@ void BM8563::getDate(rtc_date_t *date)
     }
 }
 
-void BM8563::setDate(rtc_date_t *date)
+void BM8563::setDate(const rtc_date_t *date)
 {
 
     if (date == NULL)

@@ -32,8 +32,8 @@ public:
     uint8_t readReg(uint8_t reg);
     void getTime(void);
 
-    void setTime(rtc_time_t *time);
-    void setDate(rtc_date_t *date);
+    void setTime(const rtc_time_t *time);
+    void setDate(const rtc_date_t *date);
 
     void getTime(rtc_time_t *time);
     void getDate(rtc_date_t *date);
