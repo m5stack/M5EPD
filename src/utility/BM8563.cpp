@@ -5,7 +5,7 @@ void BM8563::begin(int sda, int scl, uint32_t frequency)
     _wire.begin(sda, scl, frequency);
     writeReg(Register::ControlStatus1, 0x00);
     writeReg(Register::ControlStatus2, 0x00);
-    writeReg(Register::ClkoutControl, 0x00);
+    writeReg(Register::ClkOutControl, 0x00);
 }
 
 void BM8563::writeReg(uint8_t reg, uint8_t data)

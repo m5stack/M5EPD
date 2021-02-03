@@ -62,9 +62,9 @@ private:
         Second = 0x02,
         Day = 0x05,
         MinuteAlarm = 0x09,
+        ClkOutControl = 0x0D,
         TimerControl = 0x0E,
-        Timer = 0x0F,
-        ClkoutControl = 0x0D
+        Timer = 0x0F
     };
 
     struct Mask
