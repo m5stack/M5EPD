@@ -65,6 +65,8 @@ void BM8563::getTime(rtc_time_t *time)
 
 void BM8563::setTime(const rtc_time_t *time)
 {
+    if (time == nullptr)
+        return;
     _wire.beginTransmission(Addr);
     _wire.write(Register::Second);
     writeTime(time);
@@ -94,6 +96,8 @@ void BM8563::getDate(rtc_date_t *date)
 
 void BM8563::setDate(const rtc_date_t *date)
 {
+    if (date == nullptr)
+        return;
     _wire.beginTransmission(Addr);
     _wire.write(Register::Day);
     writeDate(date);
@@ -125,6 +129,8 @@ void BM8563::getDateTime(rtc_date_t *date, rtc_time_t *time)
 
 void BM8563::setDateTime(const rtc_date_t *date, const rtc_time_t *time)
 {
+    if (date == nullptr || time == nullptr)
+        return;
     _wire.beginTransmission(Addr);
     _wire.write(Register::Second);
     writeTime(time);
