@@ -301,15 +301,15 @@ void BM8563::writeDate(const rtc_date_t *date)
     _wire.write(ByteToBcd2(date->day));
     _wire.write(ByteToBcd2(date->week));
 
+    uint8_t mask = 0;
+    int16_t base_year = 2000;
     if (date->year < 2000)
     {
-        _wire.write(ByteToBcd2(date->mon) | 0x80);
+        mask = 0x80;
+        base_year = 1900;
     }
-    else
-    {
-        _wire.write(ByteToBcd2(date->mon));
-    }
-    _wire.write(ByteToBcd2(date->year % 100));
+    _wire.write(ByteToBcd2(date->mon) | mask);
+    _wire.write(ByteToBcd2(date->year - base_year));
 }
 
 void BM8563::writeTime(const rtc_time_t *time)
