@@ -46,6 +46,9 @@ uint8_t BM8563::ByteToBcd2(uint8_t Value)
 
 void BM8563::getTime(rtc_time_t *time)
 {
+    if (time == nullptr)
+        return;
+
     uint8_t buf[3] = {0};
 
     _wire.beginTransmission(Addr);
@@ -75,6 +78,8 @@ void BM8563::setTime(const rtc_time_t *time)
 
 void BM8563::getDate(rtc_date_t *date)
 {
+    if (date == nullptr)
+        return;
 
     uint8_t buf[4] = {0};
 
@@ -106,6 +111,9 @@ void BM8563::setDate(const rtc_date_t *date)
 
 void BM8563::getDateTime(rtc_date_t *date, rtc_time_t *time)
 {
+    if (date == nullptr || time == nullptr)
+        return;
+
     uint8_t buf[7] = {0};
 
     _wire.beginTransmission(Addr);
