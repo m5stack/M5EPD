@@ -34,10 +34,34 @@ public:
     void setTime(const rtc_time_t *time);
     void setDate(const rtc_date_t *date);
     void setDateTime(const rtc_date_t *date, const rtc_time_t *time);
+    void setTime(const rtc_time_t &time)
+    {
+        setTime(&time);
+    }
+    void setDate(const rtc_date_t &date)
+    {
+        setDate(&date);
+    }
+    void setDateTime(const rtc_date_t &date, const rtc_time_t &time)
+    {
+        setDateTime(&date, &time);
+    }
 
     void getTime(rtc_time_t *time);
     void getDate(rtc_date_t *date);
     void getDateTime(rtc_date_t *date, rtc_time_t *time);
+    void getTime(rtc_time_t &time)
+    {
+        getTime(&time);
+    }
+    void getDate(rtc_date_t &date)
+    {
+        getDate(&date);
+    }
+    void getDateTime(rtc_date_t &date, rtc_time_t &time)
+    {
+        getDateTime(&date, &time);
+    }
 
     int setAlarmIRQ(int afterSeconds);
     int setAlarmIRQ(const rtc_time_t &time);
