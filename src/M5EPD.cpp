@@ -106,7 +106,7 @@ uint32_t M5EPD::getBatteryRaw()
 uint32_t M5EPD::getBatteryVoltage()
 {
     uint32_t adc_raw_value = 0;
-    for (uint16_t i = 0; i < ADC_FILTER_SAMPLE; i++)
+    for (uint_fast16_t i = 0; i < ADC_FILTER_SAMPLE; i++)
     {
         adc_raw_value += adc1_get_raw(BAT_ADC_CHANNEL);
     }
