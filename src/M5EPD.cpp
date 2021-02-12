@@ -4,7 +4,8 @@
 
 #define BAT_ADC_CHANNEL ADC1_GPIO35_CHANNEL
 #define BASE_VOLATAGE 3600
-#define SCALE 0.5//0.78571429
+// #define SCALE 0.5//0.78571429
+#define SCALE_INV 2
 #define ADC_FILTER_SAMPLE 8
 
 
@@ -112,7 +113,7 @@ uint32_t M5EPD::getBatteryVoltage()
     }
 
     adc_raw_value = adc_raw_value / ADC_FILTER_SAMPLE;
-    uint32_t voltage = (uint32_t)(esp_adc_cal_raw_to_voltage(adc_raw_value, _adc_chars) / SCALE);
+    uint32_t voltage = static_cast<uint32_t>(esp_adc_cal_raw_to_voltage(adc_raw_value, _adc_chars) * SCALE_INV);
     return voltage;
 }
 
