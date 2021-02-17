@@ -27,6 +27,10 @@ public:
 public:
     M5EPD_Canvas(M5EPD_Driver *driver);
     M5EPD_Canvas();
+    // Copy construction is not allowed to avoid memory corruption.
+    M5EPD_Canvas(const M5EPD_Canvas& c) = delete;
+    // Assignment construction is not allowed to avoid memory corruption.
+    void operator=(const M5EPD_Canvas &src) = delete;
     ~M5EPD_Canvas();
     void setDriver(M5EPD_Driver *driver);
     void qrcode(const char *string, uint16_t x = 50, uint16_t y = 10, uint16_t width = 220, uint8_t version = 6);
@@ -39,8 +43,8 @@ public:
     uint32_t getBufferSize(void) {return _buffer_size;}
     void ReverseColor(void);
     void ReversePartColor(int32_t x, int32_t y, int32_t w, int32_t h);
-    void operator=(const M5EPD_Canvas &src);
-    
+
+
     bool drawBmpFile(fs::FS &fs, const char *path, uint16_t x, uint16_t y);
     bool drawBmpFile(fs::FS &fs, String path, uint16_t x, uint16_t y);
 
@@ -48,12 +52,12 @@ public:
                   uint16_t y = 0, uint16_t maxWidth = 0, uint16_t maxHeight = 0,
                   uint16_t offX = 0, uint16_t offY = 0,
                   jpeg_div_t scale = JPEG_DIV_NONE);
-                  
+
     bool drawJpgFile(fs::FS &fs, String path, uint16_t x = 0,
                   uint16_t y = 0, uint16_t maxWidth = 0, uint16_t maxHeight = 0,
                   uint16_t offX = 0, uint16_t offY = 0,
                   jpeg_div_t scale = JPEG_DIV_NONE);
-    
+
     bool drawJpg(const uint8_t *jpg_data, size_t jpg_len, uint16_t x = 0,
                   uint16_t y = 0, uint16_t maxWidth = 0, uint16_t maxHeight = 0,
                   uint16_t offX = 0, uint16_t offY = 0,
@@ -62,7 +66,7 @@ public:
     bool drawJpgUrl(String url, uint16_t x = 0,
                            uint16_t y = 0, uint16_t maxWidth = 0, uint16_t maxHeight = 0,
                            uint16_t offX = 0, uint16_t offY = 0, jpeg_div_t scale = JPEG_DIV_NONE);
-    
+
     bool drawPngFile(fs::FS &fs, const char *path, uint16_t x = 0, uint16_t y = 0,
                     uint16_t maxWidth = 0, uint16_t maxHeight = 0,
                     uint16_t offX = 0, uint16_t offY = 0,
