@@ -854,8 +854,7 @@ bool M5EPD_Canvas::drawBmpFile(fs::FS &fs, const char *path, uint16_t x, uint16_
  * JPEG
  */
 
-// ESP_IDF_VERSION_MAJOR is defined in ESP-IDF v3.3 or later
-#if defined(ESP_IDF_VERSION_MAJOR) && ESP_IDF_VERSION_MAJOR > 3
+#if __has_include(<esp32/rom/tjpgd.h>)
 #include <esp32/rom/tjpgd.h>
 #else
 #include <rom/tjpgd.h>
