@@ -22,31 +22,128 @@
  * THE SOFTWARE.
  */
 #include "SHT3x.h"
+#include <Wire.h>
+
+namespace
+{
+    const uint16_t I2C_ADDRESS = 0x44;
+
+    // Repatability: High, Clock stretching: Enabled
+    const uint8_t MEASUREMENT_MSB = 0x2c;
+    const uint8_t MEASUREMENT_LSB = 0x06;
+
+    const long TIMEOUT_MSEC = 50;
+    const size_t BUF_SIZE = 6;
+}
 
 void SHT3x::Begin()
 {
-    // TODO
+    // Use the default SDA=21 / SCL=22
+    Wire.begin();
 }
 
-void SHT3x::UpdateData()
+uint8_t SHT3x::UpdateData()
 {
-    // TODO
+    Wire.flush();
+    {
+        uint8_t error = SendMeasurementCommand();
+        if (error != I2C_ERROR_OK)
+        {
+            return error;
+        }
+    }
+
+    uint8_t buf[BUF_SIZE];
+    {
+        uint8_t error = ReceiveResult(buf);
+        if (error != I2C_ERROR_OK)
+        {
+            return error;
+        }
+    }
+
+    if (!CheckCrc(buf))
+    {
+        return SHT3x_ERROR_CRC;
+    }
+
+    _rawTemperature = buf[0] << 8 | buf[1];
+    _rawHumidity = buf[3] << 8 | buf[4];
+
+    return SHT3x_ERROR_OK;
+}
+
+uint8_t SHT3x::SendMeasurementCommand()
+{
+    Wire.beginTransmission(I2C_ADDRESS);
+    if (Wire.write(MEASUREMENT_MSB) != 1)
+    {
+        return Wire.lastError();
+    }
+    if (Wire.write(MEASUREMENT_LSB) != 1)
+    {
+        return Wire.lastError();
+    }
+    return Wire.endTransmission();
+}
+
+uint8_t SHT3x::ReceiveResult(uint8_t* buf)
+{
+    Wire.requestFrom(I2C_ADDRESS, BUF_SIZE);
+    Wire.setTimeout(TIMEOUT_MSEC);
+    if (Wire.readBytes(buf, BUF_SIZE) != BUF_SIZE)
+    {
+        return I2C_ERROR_TIMEOUT;
+    }
+    return I2C_ERROR_OK;
+}
+
+bool SHT3x::CheckCrc(uint8_t* buf)
+{
+    return (
+        Crc8(buf, 2) == buf[2]
+        && Crc8(buf + 3, 2) == buf[5]
+    );
+}
+
+uint8_t SHT3x::Crc8(uint8_t* buf, size_t len)
+{
+    uint8_t crc = 0xff; // initialization
+    while(len-- > 0) {
+        crc ^= *buf++;
+        for (int i = 0; i < 8; ++i)
+        {
+            crc = (crc & 0x80)
+                ? (crc << 1) ^ 0x31 // polynominal
+                : (crc << 1);
+        }
+    }
+    return crc;
 }
 
 float SHT3x::GetTemperature(TemperatureScale Degree)
 {
-    // TODO
+    switch(Degree)
+    {
+        case Cel:
+        {
+            return static_cast<float>(_rawTemperature) * 175.0f / 65535.0f - 45.0f;
+        }
+        case Fah:
+        {
+            return static_cast<float>(_rawTemperature) * 315.0f / 65535.0f - 49.0f;
+        }
+    }
     return 0.0f;
 }
 
 float SHT3x::GetRelHumidity()
 {
-    // TODO
-    return 0.0f;
+    return static_cast<float>(_rawHumidity) * 100.0f / 65535.0f;
 }
 
 float SHT3x::GetAbsHumidity(AbsHumidityScale Scale)
 {
-    // TODO
+    // Not implemented.
     return 0.0f;
 }
