@@ -22,62 +22,74 @@
  * THE SOFTWARE.
  */
 #include "Button.h"
+#include <Arduino.h>
 
 Button::Button(uint8_t pin, uint8_t invert, uint32_t dbTime)
+    : _pin(pin)
+    , _invert(invert)
+    , _dbTime(dbTime)
+    , _state(RELEASED)
+    , _transitioned(false)
 {
-    // TODO
+    pinMode(_pin, INPUT_PULLUP);
+    _transitionedAt = _lastTransitionedAt = millis();
 }
 
 uint8_t Button::read()
 {
-    // TODO
-    return 0;
+    int pressed = digitalRead(_pin);
+    if (_invert)
+    {
+        pressed = !pressed;
+    }
+    _lastRead = millis();
+    _transitioned = transitionTo(pressed ? PRESSED : RELEASED);
+    return pressed;
 }
 
-uint8_t Button::isPressed()
+bool Button::transitionTo(_State newState)
 {
-    // TODO
-    return 0;
-}
-
-uint8_t Button::isReleased()
-{
-    // TODO
-    return 0;
+    if (newState == _state)
+    {
+        return false;
+    }
+    if (_lastRead - _transitionedAt < _dbTime)
+    {
+        // transition is forbidden for debounce.
+        return false;
+    }
+    _lastTransitionedAt = _transitionedAt;
+    _transitionedAt = _lastRead;
+    _state = newState;
+    return true;
 }
 
 uint8_t Button::wasPressed()
 {
-    // TODO
-    return 0;
+    return isPressed() && _transitioned;
 }
 
 uint8_t Button::wasReleased()
 {
-    // TODO
-    return 0;
+    return isReleased() && _transitioned;
 }
 
 uint8_t Button::pressedFor(uint32_t ms)
 {
-    // TODO
-    return 0;
+    return isPressed() && (_lastRead - _transitionedAt) >= ms;
 }
 
 uint8_t Button::releasedFor(uint32_t ms)
 {
-    // TODO
-    return 0;
+    return isReleased() && (_lastRead - _transitionedAt) >= ms;
 }
 
 uint8_t Button::wasReleasefor(uint32_t ms)
 {
-    // TODO
-    return 0;
+    return isPressed() && (_transitionedAt - _lastTransitionedAt) >= ms;
 }
 
 uint32_t Button::lastChange()
 {
-    // TODO
-    return 0;
+    return _transitionedAt;
 }
