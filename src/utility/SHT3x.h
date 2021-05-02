@@ -24,22 +24,40 @@
 #ifndef _SHT3x_H_
 #define _SHT3x_H_
 
+#include <stddef.h>
+#include <stdint.h>
+
 class SHT3x
 {
 public:
     enum TemperatureScale {
         Cel,
-        Fahrenheit,
+        Fah,
+        // aliases
+        Celsius = Cel,
+        Fahrenheit = Fah,
     };
     enum AbsHumidityScale {
         Torr,
-        Bar,
+    };
+    enum Error {
+        SHT3x_ERROR_OK = 0,
+        SHT3x_ERROR_CRC = 100,
     };
     void Begin();
-    void UpdateData();
+    uint8_t UpdateData();
     float GetTemperature(TemperatureScale Degree = Cel);
     float GetRelHumidity();
+    // Not implemented.
     float GetAbsHumidity(AbsHumidityScale Scale = Torr);
+private:
+    uint8_t SendMeasurementCommand();
+    uint8_t ReceiveResult(uint8_t* buf);
+    bool CheckCrc(uint8_t* buf);
+    uint8_t Crc8(uint8_t* buf, size_t len);
+
+    uint16_t _rawTemperature = 0;
+    uint16_t _rawHumidity = 0;
 };
 
 #endif /* _SHT3x_H_ */
