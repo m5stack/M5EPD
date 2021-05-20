@@ -22,7 +22,7 @@ public:
 public:
     GT911();
     esp_err_t begin(uint8_t pin_sda, uint8_t pin_scl, uint8_t pin_int);
-    bool avaliable();
+    bool available();
     void update();
     void SetRotation(uint16_t rotate);
     tp_finger_t readFinger(uint8_t num);
