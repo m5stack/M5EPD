@@ -17,9 +17,9 @@
 #include "In_eSPI.h"
 
 #ifdef FREETYPE_FONT
-bool TFT_eSPI::_is_freetype_loaded = false;
-font_face_t TFT_eSPI::_font_face;
-std::map<uint16_t, font_render_t> TFT_eSPI::_render_map;
+std::map<uint8_t,bool> TFT_eSPI::_is_freetype_loaded;
+std::map<uint8_t,font_face_t> TFT_eSPI::_font_face;
+std::map<uint8_t,std::map<uint16_t, font_render_t>> TFT_eSPI::_render_map;
 // font_render_t *TFT_eSPI::_current_ft_render;
 #endif //FREETYPE_FONT
 
@@ -2205,15 +2205,16 @@ int16_t TFT_eSPI::getCursorY(void)
 void TFT_eSPI::setTextSize(uint16_t s)
 {
   #ifdef FREETYPE_FONT
-  if(_is_freetype_loaded && _use_freetype_font)
+  if(isFreetypeLoaded() && _use_freetype_font)
   {
-    if(_render_map.count(s) != 0)
+    if(_render_map.count(textfont) != 0 && _render_map[textfont].count(s) != 0)
     {
-      _current_ft_render = &(_render_map[s]);
+      _current_ft_render = &(_render_map[textfont][s]);
       _ft_linespace = _current_ft_render->pixel_size >> 3;
       _fill_margin_active = false;
       _write_font_height = _current_ft_render->pixel_size;
       _ft_font_size = s;
+      log_v("Switched to slot %d size %d", textfont, s);
     }
     else
     {
@@ -2397,7 +2398,7 @@ int16_t TFT_eSPI::textWidth(const char *string, uint8_t font)
   uint16_t uniCode  = 0;
 
 #ifdef FREETYPE_FONT
-  if((gfxFont == NULL) && _is_freetype_loaded && _use_freetype_font)
+  if((gfxFont == NULL) && isFreetypeLoaded() && _use_freetype_font)
   {
     // TODO: Measure freetype width
     return 0;
@@ -2514,9 +2515,9 @@ uint16_t TFT_eSPI::fontsLoaded(void)
 int16_t TFT_eSPI::fontHeight(int16_t font)
 {
 #ifdef FREETYPE_FONT
-  if(_is_freetype_loaded && _use_freetype_font)
+  if(isFreetypeLoaded() && _use_freetype_font)
   {
-    if(_render_map.count(_ft_font_size))
+    if(_render_map.count(textfont) != 0 && _render_map[textfont].count(_ft_font_size) != 0 )
       return _current_ft_render->pixel_size;
   } 
 #endif
@@ -4288,7 +4289,7 @@ size_t TFT_eSPI::write(uint8_t utf8)
 
 
 #ifdef FREETYPE_FONT
-  if(_is_freetype_loaded && _use_freetype_font)
+  if(isFreetypeLoaded() && _use_freetype_font)
   {
     drawFreetypeGlyph(uniCode);
     return 1;
@@ -4796,14 +4797,22 @@ int16_t TFT_eSPI::drawString(const char *string, int32_t poX, int32_t poY, uint8
   int16_t sumX = 0;
 
 #ifdef FREETYPE_FONT
-  if((gfxFont == NULL) && _is_freetype_loaded && _use_freetype_font)
+  if((gfxFont == NULL) && _is_freetype_loaded.count(font) != 0 && _is_freetype_loaded[font] && _use_freetype_font)
   {
-    if((_render_map.count(_ft_font_size) == 0) || (_current_ft_render == nullptr))
+    if((_render_map.count(font) == 0 || _render_map[font].count(_ft_font_size) == 0) || (_current_ft_render == nullptr))
     {
       log_e("Render is not available.");
       return sumX;
     }
 
+    log_v("font=%d,_ft_font_size=%d",font,_ft_font_size);
+    log_v("currentRender = name=(%s,%s), max=(%d,%d), cache_size=%d"
+      , _current_ft_render->font_face->ft_face->family_name
+      , _current_ft_render->font_face->ft_face->style_name
+      , _current_ft_render->max_pixel_width
+      , _current_ft_render->max_pixel_height
+      , _current_ft_render->cache_size
+      );
     uint16_t len = strlen(string);
     uint16_t n = 0;
     uint16_t base_y = 0;
@@ -4875,7 +4884,7 @@ int16_t TFT_eSPI::drawString(const char *string, int32_t poX, int32_t poY, uint8
         uint16_t uniCode = decodeUTF8((uint8_t*)string, &n, len - n);
         if(font_render_glyph(_current_ft_render, uniCode) != ESP_OK)
         {
-          log_e("Font render faild.");
+          log_e("Font render failed.");
           return sumX;
         }
         if(is_fill_bg)
@@ -4938,7 +4947,7 @@ int16_t TFT_eSPI::drawString(const char *string, int32_t poX, int32_t poY, uint8
 
         if(font_render_glyph(_current_ft_render, uniCodes[i]) != ESP_OK)
         {
-          log_e("Font render faild.");
+          log_e("Font render failed.");
           return sumX;
         }
         poX -= _current_ft_render->advance;
@@ -5001,7 +5010,7 @@ int16_t TFT_eSPI::drawString(const char *string, int32_t poX, int32_t poY, uint8
 
       if(font_render_glyph(_current_ft_render, tempcache[idx].unicode) != ESP_OK)
       {
-        log_e("Font render faild, unicode = %04X.", tempcache[idx].unicode);
+        log_e("Font render failed, unicode = %04X.", tempcache[idx].unicode);
         return sumX;
       }
       bitmap_size = ((_current_ft_render->bitmap_height * _current_ft_render->bitmap_width) >> 1) + 1;
@@ -5975,70 +5984,87 @@ void TFT_eSPI::setTextLineSpace(uint8_t space)
 
 esp_err_t TFT_eSPI::loadFont(String path, fs::FS &ffs)
 {
-  if(_is_freetype_loaded)
+  if(isFreetypeLoaded())
   {
     unloadFont();
-    _is_freetype_loaded = false;
+    _is_freetype_loaded[textfont] = false;
   }
 
+  if(_font_face.count(textfont) == 0)
+    _font_face.insert({textfont,{}});
+
   ffsupport_setffs(ffs);
-  if(font_face_init_fs(&_font_face, path.c_str()) != ESP_OK)
+  if(font_face_init_fs(&_font_face[textfont], path.c_str()) != ESP_OK)
   {
-    log_e("Font load faild.");
+    log_e("Font load failed.");
     return ESP_FAIL;
   }
 
-  _is_freetype_loaded = true;
+  log_v("Loaded font '%s' at slot %d (%s,%s)", path.c_str(), textfont, _font_face[textfont].ft_face->family_name, _font_face[textfont].ft_face->style_name);
+
+  _is_freetype_loaded[textfont] = true;
 
   return ESP_OK;
 }
 
 esp_err_t TFT_eSPI::loadFont(const uint8_t *memory_ptr, uint32_t length)
 {
-  if(_is_freetype_loaded)
+  if(isFreetypeLoaded())
   {
     unloadFont();
-    _is_freetype_loaded = false;
+    _is_freetype_loaded[textfont] = false;
   }
 
-  if(font_face_init(&_font_face, memory_ptr, length) != ESP_OK)
+  if(_font_face.count(textfont) == 0)
+    _font_face.insert({textfont,{}});
+
+  if(font_face_init(&_font_face[textfont], memory_ptr, length) != ESP_OK)
   {
-    log_e("Font load faild.");
+    log_e("Font load failed.");
     return ESP_FAIL;
   }
 
-  _is_freetype_loaded = true;
+  _is_freetype_loaded[textfont] = true;
 
   return ESP_OK;
 }
 
 esp_err_t TFT_eSPI::unloadFont()
 {
-  for(auto iter_render = _render_map.begin(); iter_render != _render_map.end(); iter_render++)
+  if(_render_map.count(textfont) != 0)
   {
-    font_render_destroy(&(iter_render->second));
-  }
-  _render_map.clear();
-  font_face_destroy(&_font_face);
-  
+    for(auto iter_render = _render_map[textfont].begin(); iter_render != _render_map[textfont].end(); iter_render++)
+    {
+      font_render_destroy(&(iter_render->second));
+    }
+    _render_map.erase(textfont);
+    font_face_destroy(&_font_face[textfont]);
+    _font_face.erase(textfont);
+  }  
   _current_ft_render = nullptr;
-  _is_freetype_loaded = false;
+  _is_freetype_loaded[textfont] = false;
   _fill_margin_active = false;
 
+  log_v("Unloaded font at slot %d",textfont);
+  
   return ESP_OK;
 }
 
 esp_err_t TFT_eSPI::createRender(uint16_t size, uint16_t cache_size)
 {
 
-  if(_render_map.count(size) != 0)
+  if(_font_face.count(textfont) == 0)
+  {
+    log_e("Font %d not loaded.", textfont);
+    return ESP_FAIL;
+  }
+  if(_render_map.count(textfont) != 0 && _render_map[textfont].count(size) != 0)
   {
     log_e("Size %d already exists.", size);
     return ESP_FAIL;
   }
-
   font_render_t font_render;
-  if(font_render_init(&font_render, &_font_face, size, cache_size) != ESP_OK)
+  if(font_render_init(&font_render, &_font_face[textfont], size, cache_size) != ESP_OK)
   {
     log_e("Render creation failed.");
     return ESP_FAIL;
@@ -6046,23 +6072,51 @@ esp_err_t TFT_eSPI::createRender(uint16_t size, uint16_t cache_size)
 
   if(font_render_glyph(&font_render, 'g') != ESP_OK)
   {
-    log_e("Font render faild.");
+    log_e("Font render failed.");
     return ESP_FAIL;
   }
-
+  font_render_destroy(&font_render);
+  if(font_render_init(&font_render, &_font_face[textfont], size, cache_size) != ESP_OK)
+  {
+    log_e("Render creation failed.");
+    return ESP_FAIL;
+  }  if(font_render_glyph(&font_render, 'g') != ESP_OK)
+  {
+    log_e("Font render failed.");
+    return ESP_FAIL;
+  }
+  font_render_destroy(&font_render);
+  if(font_render_init(&font_render, &_font_face[textfont], size, cache_size) != ESP_OK)
+  {
+    log_e("Render creation failed.");
+    return ESP_FAIL;
+  }
+  
   font_render.origin = font_render.pixel_size - font_render.bitmap_height + font_render.bitmap_top;
 
-  _render_map.insert(std::pair<uint16_t, font_render_t>(size, font_render));
-  _current_ft_render = &(_render_map[size]);
+  _render_map[textfont].insert(std::pair<uint16_t, font_render_t>(size, font_render));
+  _current_ft_render = &(_render_map[textfont][size]);
 
   _ft_linespace = _current_ft_render->pixel_size >> 3;
+
+  log_v("Created render at size %d for slot %d",size,textfont);
 
   return ESP_OK;
 }
 
+bool TFT_eSPI::isFreetypeLoaded()
+{
+  if(_is_freetype_loaded.count(textfont) == 0 )
+  {
+    return false;
+  }
+  return _is_freetype_loaded[textfont];
+}
+
+
 bool TFT_eSPI::isRenderExist(uint16_t size)
 {
-  if(_render_map.count(size) == 0)
+  if(_render_map.count(textfont) == 0 || _render_map[textfont].count(size) == 0)
   {
     return false;
   }
@@ -6071,7 +6125,7 @@ bool TFT_eSPI::isRenderExist(uint16_t size)
 
 esp_err_t TFT_eSPI::destoryRender(uint16_t size)
 {
-  if(_render_map.count(size) == 0)
+  if(_render_map.count(textfont) == 0 || _render_map[textfont].count(size) == 0)
   {
     log_e("Size %d not found.", size);
     return ESP_FAIL;
@@ -6079,14 +6133,14 @@ esp_err_t TFT_eSPI::destoryRender(uint16_t size)
 
   uint16_t current_size = _current_ft_render->pixel_size;
 
-  font_render_destroy(&(_render_map[size]));
-  _render_map.erase(size);
+  font_render_destroy(&(_render_map[textfont][size]));
+  _render_map[textfont].erase(size);
 
-  if(_render_map.size() != 0)
+  if(_render_map[textfont].size() != 0)
   {
     if(current_size == size)
     {
-      _current_ft_render = &(_render_map.begin()->second);
+      _current_ft_render = &(_render_map[textfont].begin()->second);
     }
   }
   else
@@ -6147,7 +6201,7 @@ void TFT_eSPI::drawFreetypeGlyph(uint16_t code)
 
   if(font_render_glyph(_current_ft_render, code) != ESP_OK)
   {
-    log_e("Font render faild.");
+    log_e("Font render failed.");
     return;
   }
 
@@ -6172,7 +6226,10 @@ void TFT_eSPI::drawFreetypeGlyph(uint16_t code)
 
 uint32_t TFT_eSPI::getNumOfRender(void)
 {
-  return _render_map.size();
+  if(_render_map.count(textfont) == 0)
+    return 0;
+  else
+    return _render_map[textfont].size();
 }
 
 #endif // FREETYPE_FONT

@@ -1363,7 +1363,7 @@ size_t TFT_eSprite::write(uint8_t utf8)
   _write_unicode_len = 0;
 
 #ifdef FREETYPE_FONT
-  if(_is_freetype_loaded)
+  if(isFreetypeLoaded())
   {
     drawFreetypeGlyph(uniCode);
     return 1;
