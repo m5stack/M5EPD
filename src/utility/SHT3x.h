@@ -50,7 +50,15 @@ public:
     float GetRelHumidity();
     // Not implemented.
     float GetAbsHumidity(AbsHumidityScale Scale = Torr);
+
+    /**
+     * Return the last result of `UpdateData()`
+     */
+    uint8_t GetError() const {
+        return _lastError;
+    }
 private:
+    uint8_t UpdateDataImpl();
     uint8_t SendMeasurementCommand();
     uint8_t ReceiveResult(uint8_t* buf);
     bool CheckCrc(uint8_t* buf);
@@ -58,6 +66,7 @@ private:
 
     uint16_t _rawTemperature = 0;
     uint16_t _rawHumidity = 0;
+    uint8_t _lastError = 0;
 };
 
 #endif /* _SHT3x_H_ */

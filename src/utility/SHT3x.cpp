@@ -42,7 +42,12 @@ void SHT3x::Begin()
     Wire.begin();
 }
 
-uint8_t SHT3x::UpdateData()
+uint8_t SHT3x::UpdateData() {
+    _lastError = UpdateDataImpl();
+    return _lastError;
+}
+
+uint8_t SHT3x::UpdateDataImpl()
 {
     Wire.flush();
     {
