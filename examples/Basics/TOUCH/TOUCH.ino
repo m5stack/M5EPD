@@ -19,7 +19,7 @@ void setup()
 void loop()
 {
 
-    if(M5.TP.avaliable()){
+    if(M5.TP.available()){
         if(!M5.TP.isFingerUp()){
             M5.TP.update();
             canvas.fillCanvas(0);
