@@ -136,6 +136,9 @@ public:
     int16_t textWidth(const String& string, uint8_t font) {return TFT_eSPI::textWidth(string, font);}
     int16_t textWidth(const String& string) {return TFT_eSPI::textWidth(string);}
 
+    int16_t fontHeight(void) {return TFT_eSPI::fontHeight();}
+    int16_t fontHeight(int16_t font) {return TFT_eSPI::fontHeight(font);}
+
     // Parent functions - drawing
     void drawCircle(int32_t x0, int32_t y0, int32_t r, uint32_t color) { TFT_eSPI::drawCircle(x0, y0, r, color); }
     void drawCircleHelper(int32_t x0, int32_t y0, int32_t r, uint8_t cornername, uint32_t color) { TFT_eSPI::drawCircleHelper(x0, y0, r, cornername, color); }
