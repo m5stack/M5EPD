@@ -39,6 +39,11 @@ class M5EPD
 {
 public:
     M5EPD();
+    ~M5EPD()
+    {
+        if (_adc_chars != nullptr)
+            free(_adc_chars);
+    }
     void begin(bool touchEnable = true, bool SDEnable = true, bool SerialEnable = true, bool BatteryADCEnable = true, bool I2CEnable = false);
     void update();
     void enableEXTPower() { digitalWrite(M5EPD_EXT_PWR_EN_PIN, 1); }
@@ -52,9 +57,9 @@ public:
     uint32_t getBatteryVoltage();
 
     void shutdown();
-    int shutdown( int seconds );
-    int shutdown( const rtc_time_t &RTC_TimeStruct);
-    int shutdown( const rtc_date_t &RTC_DateStruct, const rtc_time_t &RTC_TimeStruct);
+    int shutdown(int seconds);
+    int shutdown(const rtc_time_t &RTC_TimeStruct);
+    int shutdown(const rtc_date_t &RTC_DateStruct, const rtc_time_t &RTC_TimeStruct);
 
     Button BtnL = Button(M5EPD_KEY_LEFT_PIN, true, 10);
     Button BtnP = Button(M5EPD_KEY_PUSH_PIN, true, 10);
