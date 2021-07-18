@@ -167,7 +167,7 @@ public:
     void fillTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint32_t color) { TFT_eSPI::fillTriangle(x0, y0, x1, y1, x2, y2, color); }
     void setTextColor(uint16_t color) { TFT_eSPI::setTextColor(color); }
     void setTextColor(uint16_t fgcolor, uint16_t bgcolor) { TFT_eSPI::setTextColor(fgcolor, bgcolor); }
-    void setTextSize(uint8_t size) { TFT_eSPI::setTextSize(size); }
+    void setTextSize(uint16_t size) { TFT_eSPI::setTextSize(size); }
     void setTextWrap(boolean wrapX, boolean wrapY = false) { TFT_eSPI::setTextWrap(wrapX, wrapY); }
     void setTextDatum(uint8_t datum) { TFT_eSPI::setTextDatum(datum); }
     void setTextPadding(uint16_t x_width) { TFT_eSPI::setTextPadding(x_width); }

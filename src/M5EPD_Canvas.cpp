@@ -453,8 +453,8 @@ void M5EPD_Canvas::qrcode(const char *string, uint16_t x, uint16_t y, uint16_t w
     // Top quiet zone
     uint8_t thickness = width / qrcode.size;
     uint16_t lineLength = qrcode.size * thickness;
-    uint8_t xOffset = x + (width - lineLength) / 2;
-    uint8_t yOffset = y + (width - lineLength) / 2;
+    uint16_t xOffset = x + (width - lineLength) / 2;
+    uint16_t yOffset = y + (width - lineLength) / 2;
     fillRect(x, y, width, width, 0);
 
     for (uint8_t y = 0; y < qrcode.size; y++)
