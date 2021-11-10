@@ -1,71 +1,34 @@
 #include "BM8563.h"
 
-BM8563::BM8563()
+void BM8563::begin(int sda, int scl, uint32_t frequency)
 {
-}
-
-void BM8563::begin(void)
-{
-    Wire.begin(21, 22);
-    writeReg(0x00, 0x00);
-    writeReg(0x01, 0x00);
-    writeReg(0x0D, 0x00);
+    _wire.begin(sda, scl, frequency);
+    writeReg(Register::ControlStatus1, 0x00);
+    writeReg(Register::ControlStatus2, 0x00);
+    writeReg(Register::ClkOutControl, 0x00);
 }
 
 void BM8563::writeReg(uint8_t reg, uint8_t data)
 {
-    Wire.beginTransmission(0x51);
-    Wire.write(reg);
-    Wire.write(data);
-    Wire.endTransmission();
+    _wire.beginTransmission(Addr);
+    _wire.write(reg);
+    _wire.write(data);
+    _wire.endTransmission();
 }
 
 uint8_t BM8563::readReg(uint8_t reg)
 {
-    Wire.beginTransmission(0x51);
-    Wire.write(reg);
-    Wire.endTransmission();
-    Wire.requestFrom(0x51, 1);
-    return Wire.read();
-}
-
-void BM8563::getTime(void)
-{
-    Wire.beginTransmission(0x51);
-    Wire.write(0x02);
-    Wire.endTransmission();
-    Wire.requestFrom(0x51, 7);
-    while (Wire.available())
-    {
-
-        trdata[0] = Wire.read();
-        trdata[1] = Wire.read();
-        trdata[2] = Wire.read();
-        trdata[3] = Wire.read();
-        trdata[4] = Wire.read();
-        trdata[5] = Wire.read();
-        trdata[6] = Wire.read();
-    }
-
-    DataMask();
-}
-
-void BM8563::DataMask()
-{
-    trdata[0] = trdata[0] & 0x7f;
-    trdata[1] = trdata[1] & 0x7f;
-    trdata[2] = trdata[2] & 0x3f;
-    trdata[3] = trdata[3] & 0x3f;
-    trdata[4] = trdata[4] & 0x07;
-    trdata[5] = trdata[5] & 0x1f;
-    trdata[6] = trdata[6] & 0xff;
+    _wire.beginTransmission(Addr);
+    _wire.write(reg);
+    _wire.endTransmission();
+    _wire.requestFrom(Addr, 1);
+    return _wire.read();
 }
 
 uint8_t BM8563::Bcd2ToByte(uint8_t Value)
 {
-    uint8_t tmp = 0;
-    tmp = ((uint8_t)(Value & (uint8_t)0xF0) >> (uint8_t)0x4) * 10;
-    return (tmp + (Value & (uint8_t)0x0F));
+    uint8_t tmp = ((Value & 0xF0) >> 0x4) * 10;
+    return tmp + (Value & 0x0F);
 }
 
 uint8_t BM8563::ByteToBcd2(uint8_t Value)
@@ -78,115 +41,122 @@ uint8_t BM8563::ByteToBcd2(uint8_t Value)
         Value -= 10;
     }
 
-    return ((uint8_t)(bcdhigh << 4) | Value);
+    return (bcdhigh << 4) | Value;
 }
 
 void BM8563::getTime(rtc_time_t *time)
 {
+    if (time == nullptr)
+        return;
+
     uint8_t buf[3] = {0};
 
-    Wire.beginTransmission(0x51);
-    Wire.write(0x02);
-    Wire.endTransmission();
-    Wire.requestFrom(0x51, 3);
+    _wire.beginTransmission(Addr);
+    _wire.write(Register::Second);
+    _wire.endTransmission();
+    _wire.requestFrom(Addr, 3);
 
-    while (Wire.available())
+    while (_wire.available())
     {
-
-        buf[0] = Wire.read();
-        buf[1] = Wire.read();
-        buf[2] = Wire.read();
+        buf[0] = _wire.read();
+        buf[1] = _wire.read();
+        buf[2] = _wire.read();
     }
 
-    time->sec = Bcd2ToByte(buf[0] & 0x7f);
-    time->min = Bcd2ToByte(buf[1] & 0x7f);
-    time->hour = Bcd2ToByte(buf[2] & 0x3f);
+    readTime(time, buf);
 }
 
 void BM8563::setTime(const rtc_time_t *time)
 {
-
-    if (time == NULL)
+    if (time == nullptr)
         return;
-
-    Wire.beginTransmission(0x51);
-    Wire.write(0x02);
-    Wire.write(ByteToBcd2(time->sec));
-    Wire.write(ByteToBcd2(time->min));
-    Wire.write(ByteToBcd2(time->hour));
-    Wire.endTransmission();
+    _wire.beginTransmission(Addr);
+    _wire.write(Register::Second);
+    writeTime(time);
+    _wire.endTransmission();
 }
 
 void BM8563::getDate(rtc_date_t *date)
 {
+    if (date == nullptr)
+        return;
 
     uint8_t buf[4] = {0};
 
-    Wire.beginTransmission(0x51);
-    Wire.write(0x05);
-    Wire.endTransmission();
-    Wire.requestFrom(0x51, 4);
+    _wire.beginTransmission(Addr);
+    _wire.write(Register::Day);
+    _wire.endTransmission();
+    _wire.requestFrom(Addr, 4);
 
-    while (Wire.available())
+    while (_wire.available())
     {
-
-        buf[0] = Wire.read();
-        buf[1] = Wire.read();
-        buf[2] = Wire.read();
-        buf[3] = Wire.read();
+        buf[0] = _wire.read();
+        buf[1] = _wire.read();
+        buf[2] = _wire.read();
+        buf[3] = _wire.read();
     }
 
-    date->day = Bcd2ToByte(buf[0] & 0x3f);
-    date->week = Bcd2ToByte(buf[1] & 0x07);
-    date->mon = Bcd2ToByte(buf[2] & 0x1f);
-
-    if (buf[2] & 0x80)
-    {
-        date->year = 1900 + Bcd2ToByte(buf[3] & 0xff);
-    }
-    else
-    {
-        date->year = 2000 + Bcd2ToByte(buf[3] & 0xff);
-    }
+    readDate(date, buf);
 }
 
 void BM8563::setDate(const rtc_date_t *date)
 {
-
-    if (date == NULL)
+    if (date == nullptr)
         return;
-    Wire.beginTransmission(0x51);
-    Wire.write(0x05);
-    Wire.write(ByteToBcd2(date->day));
-    Wire.write(ByteToBcd2(date->week));
+    _wire.beginTransmission(Addr);
+    _wire.write(Register::Day);
+    writeDate(date);
+    _wire.endTransmission();
+}
 
-    if (date->year < 2000)
+void BM8563::getDateTime(rtc_date_t *date, rtc_time_t *time)
+{
+    if (date == nullptr || time == nullptr)
+        return;
+
+    uint8_t buf[7] = {0};
+
+    _wire.beginTransmission(Addr);
+    _wire.write(Register::Second);
+    _wire.endTransmission();
+    _wire.requestFrom(Addr, 7);
+    while (_wire.available())
     {
-
-        Wire.write(ByteToBcd2(date->mon) | 0x80);
-        Wire.write(ByteToBcd2((uint8_t)(date->year % 100)));
-    }
-    else
-    {
-        /* code */
-        Wire.write(ByteToBcd2(date->mon) | 0x00);
-        Wire.write(ByteToBcd2((uint8_t)(date->year % 100)));
+        buf[0] = _wire.read();
+        buf[1] = _wire.read();
+        buf[2] = _wire.read();
+        buf[3] = _wire.read();
+        buf[4] = _wire.read();
+        buf[5] = _wire.read();
+        buf[6] = _wire.read();
     }
 
-    Wire.endTransmission();
+    readTime(time, buf);
+    readDate(date, &buf[3]);
+}
+
+void BM8563::setDateTime(const rtc_date_t *date, const rtc_time_t *time)
+{
+    if (date == nullptr || time == nullptr)
+        return;
+    _wire.beginTransmission(Addr);
+    _wire.write(Register::Second);
+    writeTime(time);
+    writeDate(date);
+    _wire.endTransmission();
 }
 
 int BM8563::setAlarmIRQ(int afterSeconds)
 {
     uint8_t reg_value = 0;
-    reg_value = readReg(0x01);
+    reg_value = readReg(Register::ControlStatus2);
 
     if (afterSeconds < 0)
     {
-        reg_value &= ~(1 << 0);
-        writeReg(0x01, reg_value);
+        reg_value &= ~1;
+        writeReg(Register::ControlStatus2, reg_value);
         reg_value = 0x03;
-        writeReg(0x0E, reg_value);
+        writeReg(Register::TimerControl, reg_value);
         return -1;
     }
 
@@ -203,36 +173,33 @@ int BM8563::setAlarmIRQ(int afterSeconds)
     }
 
     afterSeconds = (afterSeconds / div) & 0xFF;
-    writeReg(0x0F, afterSeconds);
-    writeReg(0x0E, type_value);
+    writeReg(Register::Timer, afterSeconds);
+    writeReg(Register::TimerControl, type_value);
 
     reg_value |= (1 << 0);
     reg_value &= ~(1 << 7);
-    writeReg(0x01, reg_value);
+    writeReg(Register::ControlStatus2, reg_value);
     return afterSeconds * div;
 }
 
 int BM8563::setAlarmIRQ(const rtc_time_t &time)
 {
-    uint8_t irq_enable = false;
-    uint8_t out_buf[4] = {0x80, 0x80, 0x80, 0x80};
+    bool irq_enable = false;
+    uint8_t out_buf[4] = {0x80, 0x80, 0x80, 0x80}; //alarm disabled
 
     if (time.min >= 0)
     {
         irq_enable = true;
-        out_buf[0] = ByteToBcd2(time.min) & 0x7f;
+        out_buf[0] = ByteToBcd2(time.min) & Mask::Minute;
     }
 
     if (time.hour >= 0)
     {
         irq_enable = true;
-        out_buf[1] = ByteToBcd2(time.hour) & 0x3f;
+        out_buf[1] = ByteToBcd2(time.hour) & Mask::Hour;
     }
 
-    out_buf[2] = 0x00;
-    out_buf[3] = 0x00;
-
-    uint8_t reg_value = readReg(0x01);
+    uint8_t reg_value = readReg(Register::ControlStatus2);
 
     if (irq_enable)
     {
@@ -245,43 +212,43 @@ int BM8563::setAlarmIRQ(const rtc_time_t &time)
 
     for (int i = 0; i < 4; i++)
     {
-        writeReg(0x09 + i, out_buf[i]);
+        writeReg(Register::MinuteAlarm + i, out_buf[i]);
     }
-    writeReg(0x01, reg_value);
+    writeReg(Register::ControlStatus2, reg_value);
 
     return irq_enable ? 1 : 0;
 }
 
 int BM8563::setAlarmIRQ(const rtc_date_t &date, const rtc_time_t &time)
 {
-    uint8_t irq_enable = false;
-    uint8_t out_buf[4] = {0x80, 0x80, 0x80, 0x80};
+    bool irq_enable = false;
+    uint8_t out_buf[4] = {0x80, 0x80, 0x80, 0x80}; //alarm disabled
 
     if (time.min >= 0)
     {
         irq_enable = true;
-        out_buf[0] = ByteToBcd2(time.min) & 0x7f;
+        out_buf[0] = ByteToBcd2(time.min) & Mask::Minute;
     }
 
     if (time.hour >= 0)
     {
         irq_enable = true;
-        out_buf[1] = ByteToBcd2(time.hour) & 0x3f;
+        out_buf[1] = ByteToBcd2(time.hour) & Mask::Hour;
     }
 
     if (date.day >= 0)
     {
         irq_enable = true;
-        out_buf[2] = ByteToBcd2(date.day) & 0x3f;
+        out_buf[2] = ByteToBcd2(date.day) & Mask::Day;
     }
 
     if (date.week >= 0)
     {
         irq_enable = true;
-        out_buf[3] = ByteToBcd2(date.week) & 0x07;
+        out_buf[3] = ByteToBcd2(date.week) & Mask::Week;
     }
 
-    uint8_t reg_value = readReg(0x01);
+    uint8_t reg_value = readReg(Register::ControlStatus2);
 
     if (irq_enable)
     {
@@ -294,21 +261,60 @@ int BM8563::setAlarmIRQ(const rtc_date_t &date, const rtc_time_t &time)
 
     for (int i = 0; i < 4; i++)
     {
-        writeReg(0x09 + i, out_buf[i]);
+        writeReg(Register::MinuteAlarm + i, out_buf[i]);
     }
-    writeReg(0x01, reg_value);
+    writeReg(Register::ControlStatus2, reg_value);
 
     return irq_enable ? 1 : 0;
 }
 
-void BM8563::clearIRQ()
+void BM8563::clearIRQ(void)
 {
-    uint8_t data = readReg(0x01);
-    writeReg(0x01, data & 0xf3);
+    writeReg(Register::ControlStatus2, readReg(Register::ControlStatus2) & 0xf3);
 }
-void BM8563::disableIRQ()
+
+void BM8563::disableIRQ(void)
 {
     clearIRQ();
-    uint8_t data = readReg(0x01);
-    writeReg(0x01, data & 0xfC);
+    writeReg(Register::ControlStatus2, readReg(Register::ControlStatus2) & 0xfC);
+}
+
+void BM8563::readDate(rtc_date_t *date, uint8_t *buf)
+{
+    date->day = Bcd2ToByte(buf[0] & Mask::Day);
+    date->week = Bcd2ToByte(buf[1] & Mask::Week);
+    date->mon = Bcd2ToByte(buf[2] & Mask::Month);
+
+    date->year = buf[2] & 0x80 ? 1900 : 2000; // century
+    date->year += Bcd2ToByte(buf[3]);
+}
+
+void BM8563::readTime(rtc_time_t *time, uint8_t *buf)
+{
+    time->sec = Bcd2ToByte(buf[0] & Mask::Second);
+    time->min = Bcd2ToByte(buf[1] & Mask::Minute);
+    time->hour = Bcd2ToByte(buf[2] & Mask::Hour);
+}
+
+void BM8563::writeDate(const rtc_date_t *date)
+{
+    _wire.write(ByteToBcd2(date->day));
+    _wire.write(ByteToBcd2(date->week));
+
+    uint8_t mask = 0;
+    int16_t base_year = 2000;
+    if (date->year < 2000)
+    {
+        mask = 0x80;
+        base_year = 1900;
+    }
+    _wire.write(ByteToBcd2(date->mon) | mask);
+    _wire.write(ByteToBcd2(date->year - base_year));
+}
+
+void BM8563::writeTime(const rtc_time_t *time)
+{
+    _wire.write(ByteToBcd2(time->sec));
+    _wire.write(ByteToBcd2(time->min));
+    _wire.write(ByteToBcd2(time->hour));
 }
