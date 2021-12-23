@@ -24,6 +24,10 @@
 #include "SHT3x.h"
 #include <Wire.h>
 
+// Hack - add missing defines
+#define I2C_ERROR_OK (0)
+#define I2C_ERROR_TIMEOUT (3)
+
 namespace
 {
     const uint16_t I2C_ADDRESS = 0x44;
@@ -81,14 +85,20 @@ uint8_t SHT3x::UpdateDataImpl()
 uint8_t SHT3x::SendMeasurementCommand()
 {
     Wire.beginTransmission(I2C_ADDRESS);
-    if (Wire.write(MEASUREMENT_MSB) != 1)
+
+    uint8_t err;
+
+    err = Wire.write(MEASUREMENT_MSB);
+    if(err != 1)
     {
-        return Wire.lastError();
+        return err;
     }
-    if (Wire.write(MEASUREMENT_LSB) != 1)
+    err = Wire.write(MEASUREMENT_LSB);
+    if(err != 1)
     {
-        return Wire.lastError();
+        return err;
     }
+
     return Wire.endTransmission();
 }
 
