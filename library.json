@@ -11,6 +11,6 @@
     "url": "https://github.com/m5stack/M5EPD.git"
   },
   "version": "0.1.1",
-  "framework": "arduino",
+  "frameworks": "arduino",
   "platforms": "espressif32"
 }
