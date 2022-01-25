@@ -64,7 +64,7 @@ void M5EPD::begin(bool touchEnable, bool SDEnable, bool SerialEnable, bool Batte
     }
     else if (I2CEnable == true)
     {
-        Wire.begin(21, 22, 400000);
+        Wire.begin(21, 22, 400000UL);
     }
 
     if(BatteryADCEnable == true)

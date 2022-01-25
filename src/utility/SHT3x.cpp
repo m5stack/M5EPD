@@ -52,7 +52,7 @@ uint8_t SHT3x::UpdateDataImpl()
     Wire.flush();
     {
         uint8_t error = SendMeasurementCommand();
-        if (error != I2C_ERROR_OK)
+        if (error != 0)
         {
             return error;
         }
@@ -61,7 +61,7 @@ uint8_t SHT3x::UpdateDataImpl()
     uint8_t buf[BUF_SIZE];
     {
         uint8_t error = ReceiveResult(buf);
-        if (error != I2C_ERROR_OK)
+        if (error != 0)
         {
             return error;
         }
@@ -81,14 +81,9 @@ uint8_t SHT3x::UpdateDataImpl()
 uint8_t SHT3x::SendMeasurementCommand()
 {
     Wire.beginTransmission(I2C_ADDRESS);
-    if (Wire.write(MEASUREMENT_MSB) != 1)
-    {
-        return Wire.lastError();
-    }
-    if (Wire.write(MEASUREMENT_LSB) != 1)
-    {
-        return Wire.lastError();
-    }
+    Wire.write(MEASUREMENT_MSB);
+    Wire.write(MEASUREMENT_LSB);
+    return Wire.endTransmission();
     return Wire.endTransmission();
 }
 
@@ -98,9 +93,9 @@ uint8_t SHT3x::ReceiveResult(uint8_t* buf)
     Wire.setTimeout(TIMEOUT_MSEC);
     if (Wire.readBytes(buf, BUF_SIZE) != BUF_SIZE)
     {
-        return I2C_ERROR_TIMEOUT;
+        return 3;
     }
-    return I2C_ERROR_OK;
+    return 0;
 }
 
 bool SHT3x::CheckCrc(uint8_t* buf)

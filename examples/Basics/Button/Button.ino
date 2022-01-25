@@ -23,6 +23,7 @@ void loop() {
     if( M5.BtnL.wasPressed()) ButtonTest("Btn L Pressed");
     if( M5.BtnP.wasPressed()) ButtonTest("Btn P Pressed");
     if( M5.BtnR.wasPressed()) ButtonTest("Btn R Pressed");
+    M5.BtnL.lastChange();
     M5.update();
     delay(100);
 }
