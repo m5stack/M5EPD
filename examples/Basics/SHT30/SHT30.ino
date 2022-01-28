@@ -23,7 +23,7 @@ void loop()
     M5.SHT30.UpdateData();
     tem = M5.SHT30.GetTemperature();
     hum = M5.SHT30.GetRelHumidity();
-    Serial.printf("Temperatura: %2.2f*C  Humedad: %0.2f%%\r\n", tem, hum);
+    Serial.printf("Temperature: %2.2f*C  Humidity: %0.2f%%\r\n", tem, hum);
     dtostrf(tem, 2, 2 , temStr);
     dtostrf(hum, 2, 2 , humStr);
     canvas.drawString("Temperatura:" + String(temStr) + "*C", 100, 100);
