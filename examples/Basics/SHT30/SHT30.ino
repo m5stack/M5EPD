@@ -26,8 +26,8 @@ void loop()
     Serial.printf("Temperature: %2.2f*C  Humidity: %0.2f%%\r\n", tem, hum);
     dtostrf(tem, 2, 2 , temStr);
     dtostrf(hum, 2, 2 , humStr);
-    canvas.drawString("Temperatura:" + String(temStr) + "*C", 100, 100);
-    canvas.drawString("Humedad:" + String(humStr) , 100, 200);
+    canvas.drawString("Temperature:" + String(temStr) + "*C", 100, 100);
+    canvas.drawString("Humidity:" + String(humStr) , 100, 200);
     canvas.pushCanvas(0,300,UPDATE_MODE_A2);
     delay(1000);
 }
