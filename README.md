@@ -1,22 +1,9 @@
-# Notes and Disclaimer
-
-December 2021
-
-This branch **fm-fix-for-arduino-2.0.1** is my weak attempt to fix compilation issues and broken functionality when used with Arduino framework 2.0.1.
-
-Note: this branch is **provided as-is** and you are using it **on your own risk**.
-
-Note: this branch is not an official M5Stack version - so please, don't blame M5Stack for issues with this branch.
-
-Thanks  
-Felix
-
 
 # M5Paper Library
 
 English | [中文](README_cn.md)
 
-![M5Paper_Pic_01](https://m5stack.oss-cn-shenzhen.aliyuncs.com/image/product_jpg/assets/img/product_pics/core/m5paper/m5paper_01.jpg)
+<img src="https://m5stack.oss-cn-shenzhen.aliyuncs.com/image/product_jpg/assets/img/product_pics/core/m5paper/m5paper_01.jpg" alt="m5paper_pic_01" width="400px">
 
 ## Description
 
