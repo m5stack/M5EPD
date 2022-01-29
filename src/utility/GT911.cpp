@@ -35,8 +35,7 @@ esp_err_t GT911::begin(uint8_t pin_sda, uint8_t pin_scl, uint8_t pin_int)
     log_d("GT911: Initialization");
     pinMode(pin_int, INPUT); // Startup sequence PIN part
 
-    Wire.setClock(400000);
-    Wire.begin(pin_sda, pin_scl);
+    Wire.begin((int) pin_sda, (int) pin_scl, (uint32_t) 100000U); // Note: SHT3x sensor built into M5Paper only seems to work with default 100kHz
     delay(100);
 
     Wire.beginTransmission(0x14);
