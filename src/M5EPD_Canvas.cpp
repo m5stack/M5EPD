@@ -856,7 +856,11 @@ bool M5EPD_Canvas::drawBmpFile(fs::FS &fs, const char *path, uint16_t x, uint16_
  * JPEG
  */
 
-#include "rom/tjpgd.h"
+#if __has_include(<esp32/rom/tjpgd.h>)
+#include <esp32/rom/tjpgd.h>
+#else
+#include <rom/tjpgd.h>
+#endif
 
 #define jpgColor(c)                                  \
     (((uint16_t)(((uint8_t *)(c))[0] & 0xF8) << 8) | \
