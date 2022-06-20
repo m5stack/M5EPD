@@ -3,8 +3,8 @@
 * Copyright (c) 2022 by M5Stack
 *                  Equipped with M5Paper sample source code
 *                          配套  M5Paper 示例源代码
-* Visit the website for more information:
-* 获取更多资料请访问:
+* Visit the website for more information: https://docs.m5stack.com/zh_CN/products
+* 获取更多资料请访问: https://docs.m5stack.com/zh_CN/products
 * 
 * Please connect UNIT-LIMIT to PORT.B
 * 请将 UNIT-LIMIT 连接到 PORT.B
