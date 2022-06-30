@@ -1,6 +1,6 @@
 #include "ffsupport.h"
 
-fileclass_t fileclass;
+//fileclass_t fileclass;
 fs::FS &fontFS = SD;
 
 void ffsupport_setffs(fs::FS &ffs)
@@ -10,13 +10,15 @@ void ffsupport_setffs(fs::FS &ffs)
 
 fileclass_t* ffsupport_fopen(const char *Filename, const char *mode)
 {
-    fileclass._fstream = fontFS.open(Filename, mode);
-    return &fileclass;
+    fileclass_t* fileclass = new fileclass_t;
+    fileclass->_fstream = fontFS.open(Filename, mode);
+    return fileclass;
 }
 
 void ffsupport_fclose(fileclass_t *stream)
 {
     stream->_fstream.close();
+    delete stream;
 }
 
 size_t ffsupport_fread(void *ptr, size_t size, size_t nmemb, fileclass_t *stream)

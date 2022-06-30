@@ -967,14 +967,15 @@ public:
   void drawFreetypeGlyph(uint16_t code);
   virtual void drawFreetypeBitmap(int32_t cx, int32_t cy, uint16_t bw, uint16_t bh, uint8_t *bitmap);
 
+  bool isFreetypeLoaded();
   bool isRenderExist(uint16_t size);
   void useFreetypeFont(bool isuse = true) { _use_freetype_font = isuse;}
-
+  
 protected:
   uint8_t _ft_linespace;
-  static bool _is_freetype_loaded;
-  static font_face_t _font_face;
-  static std::map<uint16_t, font_render_t> _render_map;
+  static std::map<uint8_t,bool> _is_freetype_loaded;
+  static std::map<uint8_t,font_face_t> _font_face;
+  static std::map<uint8_t,std::map<uint16_t, font_render_t>> _render_map;
   // static font_render_t *_current_ft_render;
   font_render_t *_current_ft_render = nullptr;
   uint16_t _fill_margin_left = 0;

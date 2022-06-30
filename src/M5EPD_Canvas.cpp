@@ -12,6 +12,11 @@ M5EPD_Canvas::M5EPD_Canvas(M5EPD_Driver *driver) : TFT_eSprite(NULL)
 
 M5EPD_Canvas::M5EPD_Canvas() : TFT_eSprite(NULL)
 {
+    _epd_driver = nullptr;
+    _bpp = 4;
+    _bytewidth = 0;
+    _last_push_x = 0;
+    _last_push_y = 0;
 }
 
 M5EPD_Canvas::~M5EPD_Canvas()

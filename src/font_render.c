@@ -60,7 +60,7 @@ static esp_err_t font_cache_init(font_render_t *render)
 
     memset(render->glyph_cache_records, 0, sizeof(glyph_cache_record_t) * render->cache_size);
 
-    log_d("Chace use %d bytes", heapsize - esp_get_free_heap_size());
+    log_d("Cache uses %d bytes", heapsize - esp_get_free_heap_size());
 
     return ESP_OK;
 }
@@ -204,6 +204,7 @@ esp_err_t font_render_glyph(font_render_t *render, uint32_t utf_code)
     {
         if (font_face_set_pixel_size(render->font_face, render->pixel_size) != ESP_OK)
         {
+            log_v("font_face_set_pixel_size failed");
             return ESP_FAIL;
         }
 
@@ -213,6 +214,7 @@ esp_err_t font_render_glyph(font_render_t *render, uint32_t utf_code)
         err = FT_Load_Glyph(render->font_face->ft_face, glyph_index, FT_LOAD_DEFAULT);
         if (err)
         {
+            log_v("FT_Load_Glyph failed");
             return ESP_FAIL;
         }
 
