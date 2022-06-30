@@ -120,6 +120,10 @@ public:
     SPIClass* GetSPI(void) {return _epd_spi;}
     void SetColorReverse(bool is_reverse);
 
+    m5epd_err_t Active(void);
+    m5epd_err_t StandBy(void);
+    m5epd_err_t Sleep(void);
+
 private:
     void ResetDriver(void);
     m5epd_err_t GetSysInfo(void);

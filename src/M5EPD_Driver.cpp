@@ -537,6 +537,45 @@ m5epd_err_t M5EPD_Driver::SetTargetMemoryAddr(uint32_t tar_addr)
 }
 
 
+/** @brief Set power mode to Active
+  * @retval m5epd_err_t
+  */
+m5epd_err_t M5EPD_Driver::Active(void)
+{
+    StartSPI();
+    CHECK(WriteCommand(IT8951_TCON_SYS_RUN));
+    EndSPI();
+
+    return M5EPD_OK;
+}
+
+/** @brief Set power mode to StandBy
+  * @retval m5epd_err_t
+  */
+m5epd_err_t M5EPD_Driver::StandBy(void)
+{
+    StartSPI();
+    CHECK(WriteCommand(IT8951_TCON_STANDBY));
+    EndSPI();
+    CHECK(WaitBusy());
+
+    return M5EPD_OK;
+}
+
+/** @brief Set power mode to Sleep
+  * @retval m5epd_err_t
+  */
+m5epd_err_t M5EPD_Driver::Sleep(void)
+{
+    StartSPI();
+    CHECK(WriteCommand(IT8951_TCON_SLEEP));
+    EndSPI();
+    CHECK(WaitBusy());
+
+    return M5EPD_OK;
+}
+
+
 m5epd_err_t M5EPD_Driver::WriteReg(uint16_t addr, uint16_t data)
 {
     CHECK(WriteCommand(0x0011)); //tcon write reg command
