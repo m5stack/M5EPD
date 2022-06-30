@@ -192,9 +192,6 @@ class M5EPD_Canvas : private TFT_eSprite {
     int16_t fontHeight(void) { return TFT_eSPI::fontHeight(); }
     int16_t fontHeight(int16_t font) { return TFT_eSPI::fontHeight(font); }
 
-    int16_t fontHeight(void) {return TFT_eSPI::fontHeight();}
-    int16_t fontHeight(int16_t font) {return TFT_eSPI::fontHeight(font);}
-
     // Parent functions - drawing
     void drawCircle(int32_t x0, int32_t y0, int32_t r, uint32_t color) {
         TFT_eSPI::drawCircle(x0, y0, r, color);
