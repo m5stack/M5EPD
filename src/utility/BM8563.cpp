@@ -1,6 +1,7 @@
 #include "BM8563.h"
 
-BM8563::BM8563() {}
+BM8563::BM8563() {
+}
 
 void BM8563::begin(void) {
     Wire.begin(21, 22);
@@ -193,8 +194,8 @@ int BM8563::setAlarmIRQ(const rtc_time_t &time) {
         out_buf[1] = ByteToBcd2(time.hour) & 0x3f;
     }
 
-    out_buf[2] = 0x00;
-    out_buf[3] = 0x00;
+    out_buf[2] = 0x80;
+    out_buf[3] = 0x80;
 
     uint8_t reg_value = readReg(0x01);
 

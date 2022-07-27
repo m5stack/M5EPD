@@ -1,18 +1,18 @@
 /*
  * The MIT License
- * 
+ *
  * Copyright (c) IKEDA Yasuyuki
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,15 +34,16 @@
  * This means that debounce time is the least time where the state machine
  * must stay in the same state.
  */
-class Button
-{
-public:
+class Button {
+   public:
     /**
      * ctor.
      *
      * @param pin the pin number of GPIO.
-     * @param invert `false` for HIGH=pressed LOW=released, `true` for LOG=pressed HIGH=released.
-     * @param dbTime debounce time (milliseconds). Do not transition in this time since the last transition.
+     * @param invert `false` for HIGH=pressed LOW=released, `true` for
+     * LOG=pressed HIGH=released.
+     * @param dbTime debounce time (milliseconds). Do not transition in this
+     * time since the last transition.
      */
     Button(uint8_t pin, uint8_t invert, uint32_t dbTime);
 
@@ -58,18 +59,16 @@ public:
      * Return non-0 if in PRESSED state
      * @return non-0 for pressed, 0 for released.
      */
-    uint8_t isPressed()
-    {
-         return (_state == PRESSED);
+    uint8_t isPressed() {
+        return (_state == PRESSED);
     }
 
     /**
      * Return non-0 if in RELEASED state
      * @return non-0 for released, 0 for pressed.
      */
-    uint8_t isReleased()
-    {
-         return (_state == RELEASED);
+    uint8_t isReleased() {
+        return (_state == RELEASED);
     }
 
     /**
@@ -99,7 +98,8 @@ public:
     uint8_t releasedFor(uint32_t ms);
 
     /**
-     * Return non-0 if now in PRESSED state and was in RELEASED state for more than `ms` milliseconds.
+     * Return non-0 if now in PRESSED state and was in RELEASED state for more
+     * than `ms` milliseconds.
      * @param ms milliseconds
      * @return non-0 for pressed and was released for specified time.
      */
@@ -110,7 +110,7 @@ public:
      */
     uint32_t lastChange();
 
-private:
+   private:
     uint8_t _pin;
     uint8_t _invert;
     uint32_t _dbTime;

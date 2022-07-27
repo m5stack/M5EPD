@@ -7,8 +7,10 @@ typedef struct RTC_Time {
     int8_t hour;
     int8_t min;
     int8_t sec;
-    RTC_Time() : hour(), min(), sec() {}
-    RTC_Time(int8_t h, int8_t m, int8_t s) : hour(h), min(m), sec(s) {}
+    RTC_Time() : hour(), min(), sec() {
+    }
+    RTC_Time(int8_t h, int8_t m, int8_t s) : hour(h), min(m), sec(s) {
+    }
 } rtc_time_t;
 
 typedef struct RTC_Date {
@@ -16,9 +18,11 @@ typedef struct RTC_Date {
     int8_t mon;
     int8_t day;
     int16_t year;
-    RTC_Date() : week(), mon(), day(), year() {}
+    RTC_Date() : week(), mon(), day(), year() {
+    }
     RTC_Date(int8_t w, int8_t m, int8_t d, int16_t y)
-        : week(w), mon(m), day(d), year(y) {}
+        : week(w), mon(m), day(d), year(y) {
+    }
 } rtc_date_t;
 
 class BM8563 {
