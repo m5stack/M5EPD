@@ -26,9 +26,9 @@ GT911::GT911() {
 
 volatile uint8_t gt911_irq_trigger = 0;
 void ICACHE_RAM_ATTR ___GT911IRQ___() {
-    noInterrupts();
+    //noInterrupts();
     gt911_irq_trigger = 1;
-    interrupts();
+    //interrupts();
 }
 
 esp_err_t GT911::begin(uint8_t pin_sda, uint8_t pin_scl, uint8_t pin_int) {
