@@ -8,11 +8,8 @@
 #define SCALE 0.5//0.78571429
 #define ADC_FILTER_SAMPLE 8
 
-
-M5EPD::M5EPD()
+M5EPD::M5EPD() : _is_adc_start(false), _isInited(false), _adc_chars(nullptr)
 {
-    _isInited = false;
-    _is_adc_start = false;
 }
 
 /** @brief Initialize the power supply, screen and other peripherals
