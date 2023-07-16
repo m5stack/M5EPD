@@ -111,7 +111,7 @@ uint8_t calcChecksum(const uint8_t *buf, uint8_t len) {
     return ccsum;
 }
 
-bool GT911::avaliable() {
+bool GT911::available() {
     if (gt911_irq_trigger == 1) {
         gt911_irq_trigger = 0;
         return true;
