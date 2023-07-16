@@ -1,6 +1,7 @@
 #include "M5EPD.h"
 #include "driver/gpio.h"
 #include "driver/adc.h"
+#include "soc/adc_channel.h"
 
 #define BAT_ADC_CHANNEL ADC1_GPIO35_CHANNEL
 #define BASE_VOLATAGE 3600
@@ -63,7 +64,7 @@ void M5EPD::begin(bool touchEnable, bool SDEnable, bool SerialEnable, bool Batte
     }
     else if (I2CEnable == true)
     {
-        Wire.begin(21, 22, 400000);
+        Wire.begin(21, 22, (uint32_t) 400000U);
     }
 
     if(BatteryADCEnable == true)
