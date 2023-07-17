@@ -1683,7 +1683,7 @@ static FT_Error tt_loader_init(TT_Loader loader, TT_Size size,
         exec->subpixel_positioned   = TRUE;
 #else  /* 0 */
         exec->compatible_widths     = FT_BOOL(FT_LOAD_TARGET_MODE(load_flags) !=
-                                          TT_LOAD_COMPATIBLE_WIDTHS);
+                                              TT_LOAD_COMPATIBLE_WIDTHS);
         exec->symmetrical_smoothing = FT_BOOL(FT_LOAD_TARGET_MODE(load_flags) !=
                                               TT_LOAD_SYMMETRICAL_SMOOTHING);
         exec->bgr = FT_BOOL(FT_LOAD_TARGET_MODE(load_flags) != TT_LOAD_BGR);

@@ -15,7 +15,6 @@ void setup() {
     canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
 }
 
-
 void loop() {
     if (M5.TP.available()) {
         if (!M5.TP.isFingerUp()) {

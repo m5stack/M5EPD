@@ -4910,10 +4910,10 @@ int16_t TFT_eSPI::drawChar(uint16_t uniCode, int32_t x, int32_t y,
             setWindow(x, y, x + width - 1, y + height - 1);
 
 #ifdef RPI_WRITE_STROBE
-            uint8_t textcolorBin[]   = {(uint8_t)(textcolor >> 8),
-                                      (uint8_t)textcolor};
-            uint8_t textbgcolorBin[] = {(uint8_t)(textbgcolor >> 8),
-                                        (uint8_t)textbgcolor};
+                    uint8_t textcolorBin[]   = {(uint8_t)(textcolor >> 8),
+                                                (uint8_t)textcolor};
+                    uint8_t textbgcolorBin[] = {(uint8_t)(textbgcolor >> 8),
+                                                (uint8_t)textbgcolor};
 #endif
 
             // Maximum font size is equivalent to 180x180 pixels in area

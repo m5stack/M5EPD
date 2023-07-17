@@ -28,7 +28,9 @@ M5EPD_Driver::M5EPD_Driver(int8_t spi_index) {
     _is_reverse   = false;
 }
 
-M5EPD_Driver::~M5EPD_Driver() { delete _epd_spi; }
+M5EPD_Driver::~M5EPD_Driver() {
+    delete _epd_spi;
+}
 
 m5epd_err_t M5EPD_Driver::begin(int8_t sck, int8_t mosi, int8_t miso, int8_t cs,
                                 int8_t busy, int8_t rst) {
@@ -518,7 +520,9 @@ void M5EPD_Driver::StartSPI(void) {
     _epd_spi->beginTransaction(SPISettings(_spi_freq, MSBFIRST, SPI_MODE0));
 }
 
-void M5EPD_Driver::EndSPI(void) { _epd_spi->endTransaction(); }
+void M5EPD_Driver::EndSPI(void) {
+    _epd_spi->endTransaction();
+}
 
 m5epd_err_t M5EPD_Driver::WaitBusy(uint32_t timeout) {
     uint32_t start_time = millis();
@@ -584,6 +588,10 @@ m5epd_err_t M5EPD_Driver::WriteArgs(uint16_t cmd, uint16_t *args,
     return M5EPD_OK;
 }
 
-uint16_t M5EPD_Driver::UpdateCount(void) { return _update_count; }
+uint16_t M5EPD_Driver::UpdateCount(void) {
+    return _update_count;
+}
 
-void M5EPD_Driver::ResetUpdateCount(void) { _update_count = 0; }
+void M5EPD_Driver::ResetUpdateCount(void) {
+    _update_count = 0;
+}

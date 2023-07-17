@@ -7,17 +7,17 @@ jobs:
     strategy:
       matrix:
         path:
-          - check: './'    # path to include
-            exclude: ''    # path to exclude
+          - check: "./" # path to include
+            exclude: "utility" # path to exclude
           # - check: 'src'
           #   exclude: ''
           # - check: 'examples'
           #   exclude: ''
     steps:
-    - uses: actions/checkout@v2
-    - name: Run clang-format style check for C/C++/Protobuf programs.
-      uses: jidicula/clang-format-action@v4.5.0
-      with:
-        clang-format-version: '13'
-        check-path: ${{ matrix.path['check'] }}
-        exclude-regex: ${{ matrix.path['exclude'] }}
+      - uses: actions/checkout@v2
+      - name: Run clang-format style check for C/C++/Protobuf programs.
+        uses: jidicula/clang-format-action@v4.5.0
+        with:
+          clang-format-version: "13"
+          check-path: ${{ matrix.path['check'] }}
+          exclude-regex: ${{ matrix.path['exclude'] }}

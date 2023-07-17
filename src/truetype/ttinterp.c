@@ -542,13 +542,13 @@ TT_Load_Context(TT_ExecContext exec, TT_Face face, TT_Size size) {
     /*      with broken fonts like arialbs, courbs, timesbs, etc.         */
     tmp             = exec->stackSize;
     error           = Update_Max(exec->memory, &tmp, sizeof(FT_F26Dot6),
-                       (void*)&exec->stack, maxp->maxStackElements + 32);
+                                 (void*)&exec->stack, maxp->maxStackElements + 32);
     exec->stackSize = (FT_UInt)tmp;
     if (error) return error;
 
     tmp             = exec->glyphSize;
     error           = Update_Max(exec->memory, &tmp, sizeof(FT_Byte),
-                       (void*)&exec->glyphIns, maxp->maxSizeOfInstructions);
+                                 (void*)&exec->glyphIns, maxp->maxSizeOfInstructions);
     exec->glyphSize = (FT_UShort)tmp;
     if (error) return error;
 
@@ -5705,7 +5705,7 @@ static void _iup_worker_interpolate(IUP_Worker worker, FT_UInt p1, FT_UInt p2,
                 if (!scale_valid) {
                     scale_valid = 1;
                     scale       = FT_DivFix(org2 + delta2 - (org1 + delta1),
-                                      orus2 - orus1);
+                                            orus2 - orus1);
                 }
 
                 x = (org1 + delta1) +
@@ -6057,8 +6057,7 @@ static void Ins_GETINFO(INS_ARG) {
         FT_TRACE7(("Setting rasterizer version %d\n", CUR.rasterizer_version));
     } else
 #endif /* TT_CONFIG_OPTION_SUBPIXEL_HINTING */
-        if ((args[0] & 1) != 0)
-        K = 35;
+        if ((args[0] & 1) != 0) K = 35;
 
     /********************************/
     /* GLYPH ROTATED                */

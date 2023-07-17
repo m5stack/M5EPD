@@ -3,16 +3,14 @@
 * Copyright (c) 2022 by M5Stack
 *                  Equipped with M5Paper sample source code
 *                          配套  M5Paper 示例源代码
-* Visit the website for more
-information：https://docs.m5stack.com/en/app/scales_kit
-* 获取更多资料请访问：https://docs.m5stack.com/zh_CN/app/scales_kit
+* Visit for more information: https://docs.m5stack.com/en/app/scales_kit
+* 获取更多资料请访问: https://docs.m5stack.com/zh_CN/app/scales_kit
 *
-* describe: SCALES KIT WEIGHT UNIT EXAMPLE.
-* date：2022/02/25
+* Describe: SCALES KIT WEIGHT UNIT EXAMPLE.
+* Date:2022/02/25
 *******************************************************************************
-  Libraries:
+  Depend Libraries:
   - [HX711](https://github.com/bogde/HX711)
-
 */
 
 #include <M5EPD.h>
@@ -29,7 +27,7 @@ M5Canvas canvas(&display);
 HX711 scale;
 
 void setup() {
-    M5.begin(true, false, true, true, false); 
+    M5.begin(true, false, true, true, false);
 
     display.begin();
 

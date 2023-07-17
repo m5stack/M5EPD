@@ -10,9 +10,12 @@ M5EPD_Canvas::M5EPD_Canvas(M5EPD_Driver *driver) : TFT_eSprite(NULL) {
     _last_push_y = 0;
 }
 
-M5EPD_Canvas::M5EPD_Canvas() : TFT_eSprite(NULL) {}
+M5EPD_Canvas::M5EPD_Canvas() : TFT_eSprite(NULL) {
+}
 
-M5EPD_Canvas::~M5EPD_Canvas() { deleteCanvas(); }
+M5EPD_Canvas::~M5EPD_Canvas() {
+    deleteCanvas();
+}
 
 void M5EPD_Canvas::operator=(const M5EPD_Canvas &src) {
     deleteCanvas();
@@ -20,7 +23,9 @@ void M5EPD_Canvas::operator=(const M5EPD_Canvas &src) {
     memcpy(_img8, src._img8, src._buffer_size);
 }
 
-void M5EPD_Canvas::setDriver(M5EPD_Driver *driver) { _epd_driver = driver; }
+void M5EPD_Canvas::setDriver(M5EPD_Driver *driver) {
+    _epd_driver = driver;
+}
 
 void M5EPD_Canvas::fillRect(int32_t x, int32_t y, int32_t w, int32_t h,
                             uint32_t color) {
@@ -307,7 +312,9 @@ void M5EPD_Canvas::fillCanvas(uint32_t color) {
 
 /** @param color clear display
  */
-void M5EPD_Canvas::clear(void) { M5EPD_Canvas::fillCanvas(0); }
+void M5EPD_Canvas::clear(void) {
+    M5EPD_Canvas::fillCanvas(0);
+}
 
 /** @brief push a single pixel at an arbitrary position
  * @param x pos x

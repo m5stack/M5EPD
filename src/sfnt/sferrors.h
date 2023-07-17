@@ -15,12 +15,11 @@
 /*                                                                         */
 /***************************************************************************/
 
-
-  /*************************************************************************/
-  /*                                                                       */
-  /* This file is used to define the SFNT error enumeration constants.     */
-  /*                                                                       */
-  /*************************************************************************/
+/*************************************************************************/
+/*                                                                       */
+/* This file is used to define the SFNT error enumeration constants.     */
+/*                                                                       */
+/*************************************************************************/
 
 #ifndef __SFERRORS_H__
 #define __SFERRORS_H__
@@ -29,9 +28,9 @@
 
 #undef __FTERRORS_H__
 
-#undef  FT_ERR_PREFIX
-#define FT_ERR_PREFIX  SFNT_Err_
-#define FT_ERR_BASE    FT_Mod_Err_SFNT
+#undef FT_ERR_PREFIX
+#define FT_ERR_PREFIX SFNT_Err_
+#define FT_ERR_BASE   FT_Mod_Err_SFNT
 
 #include FT_ERRORS_H
 

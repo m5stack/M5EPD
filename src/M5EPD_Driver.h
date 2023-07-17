@@ -132,11 +132,17 @@ class M5EPD_Driver {
                            m5epd_update_mode_t mode);
 
     uint16_t UpdateCount(void);
-    uint8_t GetRotate(void) { return _rotate; };
-    uint8_t GetDirection(void) { return _direction; };
+    uint8_t GetRotate(void) {
+        return _rotate;
+    };
+    uint8_t GetDirection(void) {
+        return _direction;
+    };
     void ResetUpdateCount(void);
     m5epd_err_t CheckAFSR(void);
-    SPIClass *GetSPI(void) { return _epd_spi; }
+    SPIClass *GetSPI(void) {
+        return _epd_spi;
+    }
     void SetColorReverse(bool is_reverse);
 
     m5epd_err_t Active(void);
