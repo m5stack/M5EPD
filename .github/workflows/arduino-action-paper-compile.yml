@@ -15,7 +15,7 @@ on:
     - '**.cpp'
     - '**.h'
     - 'arduino-test-compile.sh'
-    - 'action.yml'
+    - '*.yml'
   workflow_dispatch:
 jobs:
   build:

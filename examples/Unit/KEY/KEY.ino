@@ -33,14 +33,16 @@ void changeLedColor();
 
 void setup() {
     M5.begin();  // Init M5Stack  初始化M5Stack
-    M5.EPD.SetRotation(
-        90);     // Set the rotation of the display.  设置屏幕旋转角度
+    // Set the rotation of the display.  设置屏幕旋转角度
+    M5.EPD.SetRotation(90);
+
     M5.EPD.Clear(true);             // Clear the screen.  清屏
     M5.RTC.begin();                 // Init the RTC.  初始化 RTC
     canvas.createCanvas(540, 960);  // Create a canvas.  创建画布
     canvas.setTextSize(3);          // Set the text size.  设置文字大小
-    canvas.drawString("UNIT-KEY Example", 135,
-                      350);         // Draw a string.  绘制字符串
+
+    // Draw a string.  绘制字符串
+    canvas.drawString("UNIT-KEY Example", 135, 350);
     canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);  // Update the screen.  更新屏幕
 
     pinMode(KEY_PIN, INPUT_PULLUP);  // Init Key pin.  初始化Key引脚.
