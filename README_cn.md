@@ -1,5 +1,9 @@
 # M5Paper Library
 
+[![Arduino Compile](https://github.com/m5stack/M5EPD/actions/workflows/arduino-action-paper-compile.yml/badge.svg)](https://github.com/m5stack/M5EPD/actions/workflows/arduino-action-paper-compile.yml)
+[![Arduino Lint](https://github.com/m5stack/M5EPD/actions/workflows/Arduino-Lint-Check.yml/badge.svg)](https://github.com/m5stack/M5EPD/actions/workflows/Arduino-Lint-Check.yml)
+[![Clang Format](https://github.com/m5stack/M5EPD/actions/workflows/clang-format-check.yml/badge.svg)](https://github.com/m5stack/M5EPD/blob/main/.github/workflows/clang-format-check.yml)
+
 [English](README.md) | 中文
 
 ![M5Paper_Pic_01](https://m5stack.oss-cn-shenzhen.aliyuncs.com/image/product_jpg/assets/img/product_pics/core/m5paper/m5paper_01.jpg)

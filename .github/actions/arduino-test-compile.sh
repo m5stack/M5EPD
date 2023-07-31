@@ -171,6 +171,27 @@ if [[ -f $GITHUB_WORKSPACE/library.properties ]]; then
   fi
 fi
 
+if [[ -f $GITHUB_WORKSPACE/library.properties ]]; then
+  OLD_IFS="$IFS"
+  IFS=$'\n'
+  for line in `cat $GITHUB_WORKSPACE/library.properties`
+  do
+      result=$(echo $line | grep "depends=")
+      if [[ "$result" != "" ]]
+      then
+          depends_str=${line##*depends=}
+          IFS=","
+          for lib in ${depends_str[@]}
+          do
+              echo "download $lib"
+              arduino-cli lib install $lib
+          done;
+      fi
+  done
+  IFS="$OLD_IFS"
+fi
+
+
 #
 # Update index and install the required board platform
 #
