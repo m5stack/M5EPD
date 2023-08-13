@@ -24,119 +24,89 @@
 /*                                                                         */
 /***************************************************************************/
 
-
 #include <ft2build.h>
 #include FT_INTERNAL_DEBUG_H
 
 #include FT_INTERNAL_OBJECTS_H
 #include FT_SERVICE_GX_VALIDATE_H
 
+/* documentation is in ftgxval.h */
 
-  /* documentation is in ftgxval.h */
+FT_EXPORT_DEF(FT_Error)
+FT_TrueTypeGX_Validate(FT_Face face, FT_UInt validation_flags,
+                       FT_Bytes tables[FT_VALIDATE_GX_LENGTH],
+                       FT_UInt table_length) {
+    FT_Service_GXvalidate service;
+    FT_Error error;
 
-  FT_EXPORT_DEF( FT_Error )
-  FT_TrueTypeGX_Validate( FT_Face   face,
-                          FT_UInt   validation_flags,
-                          FT_Bytes  tables[FT_VALIDATE_GX_LENGTH],
-                          FT_UInt   table_length )
-  {
-    FT_Service_GXvalidate  service;
-    FT_Error               error;
-
-
-    if ( !face )
-    {
-      error = FT_THROW( Invalid_Face_Handle );
-      goto Exit;
+    if (!face) {
+        error = FT_THROW(Invalid_Face_Handle);
+        goto Exit;
     }
 
-    if ( tables == NULL )
-    {
-      error = FT_THROW( Invalid_Argument );
-      goto Exit;
+    if (tables == NULL) {
+        error = FT_THROW(Invalid_Argument);
+        goto Exit;
     }
 
-    FT_FACE_FIND_GLOBAL_SERVICE( face, service, GX_VALIDATE );
+    FT_FACE_FIND_GLOBAL_SERVICE(face, service, GX_VALIDATE);
 
-    if ( service )
-      error = service->validate( face,
-                                 validation_flags,
-                                 tables,
-                                 table_length );
+    if (service)
+        error = service->validate(face, validation_flags, tables, table_length);
     else
-      error = FT_THROW( Unimplemented_Feature );
+        error = FT_THROW(Unimplemented_Feature);
 
-  Exit:
+Exit:
     return error;
-  }
+}
 
+FT_EXPORT_DEF(void)
+FT_TrueTypeGX_Free(FT_Face face, FT_Bytes table) {
+    FT_Memory memory;
 
-  FT_EXPORT_DEF( void )
-  FT_TrueTypeGX_Free( FT_Face   face,
-                      FT_Bytes  table )
-  {
-    FT_Memory  memory;
+    if (!face) return;
 
+    memory = FT_FACE_MEMORY(face);
 
-    if ( !face )
-      return;
+    FT_FREE(table);
+}
 
-    memory = FT_FACE_MEMORY( face );
+FT_EXPORT_DEF(FT_Error)
+FT_ClassicKern_Validate(FT_Face face, FT_UInt validation_flags,
+                        FT_Bytes *ckern_table) {
+    FT_Service_CKERNvalidate service;
+    FT_Error error;
 
-    FT_FREE( table );
-  }
-
-
-  FT_EXPORT_DEF( FT_Error )
-  FT_ClassicKern_Validate( FT_Face    face,
-                           FT_UInt    validation_flags,
-                           FT_Bytes  *ckern_table )
-  {
-    FT_Service_CKERNvalidate  service;
-    FT_Error                  error;
-
-
-    if ( !face )
-    {
-      error = FT_THROW( Invalid_Face_Handle );
-      goto Exit;
+    if (!face) {
+        error = FT_THROW(Invalid_Face_Handle);
+        goto Exit;
     }
 
-    if ( ckern_table == NULL )
-    {
-      error = FT_THROW( Invalid_Argument );
-      goto Exit;
+    if (ckern_table == NULL) {
+        error = FT_THROW(Invalid_Argument);
+        goto Exit;
     }
 
-    FT_FACE_FIND_GLOBAL_SERVICE( face, service, CLASSICKERN_VALIDATE );
+    FT_FACE_FIND_GLOBAL_SERVICE(face, service, CLASSICKERN_VALIDATE);
 
-    if ( service )
-      error = service->validate( face,
-                                 validation_flags,
-                                 ckern_table );
+    if (service)
+        error = service->validate(face, validation_flags, ckern_table);
     else
-      error = FT_THROW( Unimplemented_Feature );
+        error = FT_THROW(Unimplemented_Feature);
 
-  Exit:
+Exit:
     return error;
-  }
+}
 
+FT_EXPORT_DEF(void)
+FT_ClassicKern_Free(FT_Face face, FT_Bytes table) {
+    FT_Memory memory;
 
-  FT_EXPORT_DEF( void )
-  FT_ClassicKern_Free( FT_Face   face,
-                       FT_Bytes  table )
-  {
-    FT_Memory  memory;
+    if (!face) return;
 
+    memory = FT_FACE_MEMORY(face);
 
-    if ( !face )
-      return;
-
-    memory = FT_FACE_MEMORY( face );
-
-
-    FT_FREE( table );
-  }
-
+    FT_FREE(table);
+}
 
 /* END */

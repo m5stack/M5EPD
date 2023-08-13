@@ -3,8 +3,7 @@
 
 M5EPD_Canvas canvas(&M5.EPD);
 
-void setup()
-{
+void setup() {
     M5.begin();
     M5.EPD.SetRotation(90);
     M5.EPD.Clear(true);
@@ -14,14 +13,14 @@ void setup()
         delay(500);
         Serial.print(".");
     }
-    
+
     canvas.createCanvas(540, 960);
     canvas.setTextSize(3);
-    canvas.drawJpgUrl("https://m5stack.oss-cn-shenzhen.aliyuncs.com/image/example_pic/flower.jpg");
-    canvas.pushCanvas(0,0,UPDATE_MODE_GC16);
+    canvas.drawJpgUrl(
+        "https://m5stack.oss-cn-shenzhen.aliyuncs.com/image/example_pic/"
+        "flower.jpg");
+    canvas.pushCanvas(0, 0, UPDATE_MODE_GC16);
 }
 
-void loop()
-{
-
+void loop() {
 }

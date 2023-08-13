@@ -1,8 +1,14 @@
+
 # M5Paper Library
+
+[![Arduino Compile](https://github.com/m5stack/M5EPD/actions/workflows/arduino-action-paper-compile.yml/badge.svg)](https://github.com/m5stack/M5EPD/actions/workflows/arduino-action-paper-compile.yml)
+[![Arduino Lint](https://github.com/m5stack/M5EPD/actions/workflows/Arduino-Lint-Check.yml/badge.svg)](https://github.com/m5stack/M5EPD/actions/workflows/Arduino-Lint-Check.yml)
+[![Clang Format](https://github.com/m5stack/M5EPD/actions/workflows/clang-format-check.yml/badge.svg)](https://github.com/m5stack/M5EPD/actions/workflows/clang-format-check.yml)
+
 
 English | [中文](README_cn.md)
 
-![M5Paper_Pic_01](https://m5stack.oss-cn-shenzhen.aliyuncs.com/image/product_jpg/assets/img/product_pics/core/m5paper/m5paper_01.jpg)
+<img src="https://m5stack.oss-cn-shenzhen.aliyuncs.com/image/product_jpg/assets/img/product_pics/core/m5paper/m5paper_01.jpg" alt="m5paper_pic_01" width="400px">
 
 ## Description
 
@@ -115,7 +121,7 @@ For more info on specific pin functions refer to the official ESP32 Docs[ESP32 d
 
 -  **API**
 
-   - [Arduino API](https://docs.m5stack.com/#/en/arduino/arduino_home_page?id=m5paper_api)
+   - [Arduino API](https://docs.m5stack.com/en/api/m5paper/system_api)
 
 ## Schematic
 
