@@ -11,9 +11,11 @@
 *******************************************************************************
   Depend Libraries:
   - [HX711](https://github.com/bogde/HX711)
+  - [M5Unified](https://github.com/m5stack/M5Unified)
+  - [M5GFX](https://github.com/m5stack/M5GFX)
 */
 
-#include <M5EPD.h>
+#include <M5Unified.h>
 #include <M5GFX.h>
 #include "HX711.h"
 
@@ -27,7 +29,7 @@ M5Canvas canvas(&display);
 HX711 scale;
 
 void setup() {
-    M5.begin(true, false, true, true, false);
+    M5.begin();
 
     display.begin();
 
