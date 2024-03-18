@@ -183,7 +183,7 @@ For more info on specific pin functions refer to the official ESP32 Docs[ESP32 d
     # Do it everytime you want to start a new project
     # Clone the template somewhere
     mkdir ~/src && cd ~/src
-    git clone --recursive https://github.com/icyqwq/OLEDTrueType.git my_project
+    git clone --recursive https://github.com/m5stack/M5EPD.git my_project
     ```
 
     Export the ESP-IDF environment variables in your shell:
