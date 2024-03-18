@@ -126,7 +126,7 @@ For more info on specific pin functions refer to the official ESP32 Docs[ESP32 d
 3. From the ESP-IDF cmd, clone the template
 
    ```sh
-   git clone --recursive https://github.com/icyqwq/OLEDTrueType.git my_project
+   git clone --recursive https://github.com/m5stack/M5EPD.git my_project
    ```
 
 4. Compile it
