@@ -34,7 +34,7 @@ M5EPD_Driver::~M5EPD_Driver() {
 
 m5epd_err_t M5EPD_Driver::begin(int8_t sck, int8_t mosi, int8_t miso, int8_t cs,
                                 int8_t busy, int8_t rst) {
-    _epd_spi->begin(sck, miso, mosi, 4);
+    _epd_spi->begin(sck, miso, mosi, -1);
     _pin_cs   = cs;
     _pin_busy = busy;
     _pin_sck  = sck;
